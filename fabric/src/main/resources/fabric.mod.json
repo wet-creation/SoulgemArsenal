@@ -16,7 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ua.com.xela.soulgem_arsenal.Soulgem_arsenal"
+      {
+        "adapter": "kotlin",
+        "value": "ua.com.xela.soulgem_arsenal.SoulGemArsenal"
+      }
     ]
   },
   "mixins": [
@@ -27,6 +30,7 @@
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
+    "fabric-language-kotlin": ">=${kotlin_fabric}",
     "java": ">=${java_version}"
   },
   "suggests": {

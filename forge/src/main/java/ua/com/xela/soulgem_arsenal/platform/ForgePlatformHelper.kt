@@ -1,23 +1,17 @@
-package ua.com.xela.soulgem_arsenal.platform;
+package ua.com.xela.soulgem_arsenal.platform
 
-import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.ModList
+import net.minecraftforge.fml.loading.FMLLoader
+import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
 
-public class ForgePlatformHelper implements IPlatformHelper {
+class ForgePlatformHelper: IPlatformHelper {
+    override val platformName: String
+        get() = "Forge"
 
-    @Override
-    public String getPlatformName() {
-        return "Forge";
+    override fun isModLoaded(modId: String?): Boolean {
+       return ModList.get().isLoaded(modId)
     }
 
-    @Override
-    public boolean isModLoaded(String modId) {
-        return ModList.get().isLoaded(modId);
-    }
-
-    @Override
-    public boolean isDevelopmentEnvironment() {
-        return !FMLLoader.isProduction();
-    }
+    override val isDevelopmentEnvironment: Boolean
+        get() = !FMLLoader.isProduction()
 }

@@ -21,10 +21,16 @@ dependencies {
     // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
 }
+
 
 configurations {
     commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonKotlin {
         canBeResolved = false
         canBeConsumed = true
     }
@@ -36,6 +42,9 @@ configurations {
 
 artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
+    sourceSets.main.kotlin.sourceDirectories.each { dir ->
+        commonKotlin dir
+    }
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
 }
 

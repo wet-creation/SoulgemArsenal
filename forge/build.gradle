@@ -11,6 +11,7 @@ mixin {
     config("${mod_id}.forge.mixins.json")
 }
 
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
@@ -66,12 +67,29 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        content { includeGroup "thedarkcolour" }
+    }
+}
+
+tasks.matching { it.name == "compileKotlin" }.configureEach {
+    dependsOn(tasks.named("processResources"))
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+
+    implementation "thedarkcolour:kotlinforforge:${kotlin_forge}"
+    implementation group: "thedarkcolour", name: "kfflang", version: kotlin_forge
+    implementation group: "thedarkcolour", name: "kfflib", version: kotlin_forge
+    implementation group: "thedarkcolour", name: "kffmod", version: kotlin_forge
 }
 
 publishing {
@@ -86,4 +104,32 @@ sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
+    it.kotlin.destinationDirectory = dir
 }
+
+afterEvaluate {
+    // 1. Находим и кастрируем addMixinsToJar
+    tasks.matching { it.name == "addMixinsToJar" }.configureEach { t ->
+        // полностью отключаем
+        t.enabled = false
+        // убираем все зависимости, чтобы не было кругов
+        t.setDependsOn([])
+    }
+
+    // 2. Убираем любые зависимости jar от addMixinsToJar (если плагин их навесил)
+    tasks.matching { it.name == "jar" }.configureEach { jarTask ->
+        // удаляем зависимости типа dependsOn(addMixinsToJar)
+        jarTask.dependsOn.removeIf { dep ->
+            dep instanceof Task && dep.name == "addMixinsToJar"
+        }
+
+    }
+
+    // 3. Аналогично можно подчистить test-задачи, если плагин завязал их на addMixinsToJar
+    tasks.matching { it.name in ["compileTestJava", "compileTestKotlin", "test"] }.configureEach { testTask ->
+        testTask.dependsOn.removeIf { dep ->
+            dep instanceof Task && dep.name == "addMixinsToJar"
+        }
+    }
+}
+

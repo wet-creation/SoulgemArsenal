@@ -1,6 +1,8 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 base {
@@ -14,6 +16,9 @@ java {
 }
 
 repositories {
+    maven {
+        url "https://cursemaven.com"
+    }
     mavenCentral()
     // https://docs.gradle.org/current/userguide/declaring_repositories.html#declaring_content_exclusively_found_in_one_repository
     exclusiveContent {
@@ -26,14 +31,16 @@ repositories {
         filter { includeGroupAndSubgroups('org.spongepowered') }
     }
     exclusiveContent {
-        forRepositories(maven {
-            name = 'ParchmentMC'
-            url = 'https://maven.parchmentmc.org/'
-        },
+        forRepositories(
+                maven {
+                    name = 'ParchmentMC'
+                    url = 'https://maven.parchmentmc.org/'
+                },
                 maven {
                     name = "NeoForge"
                     url = 'https://maven.neoforged.net/releases'
-                })
+                }
+        )
         filter { includeGroup('org.parchmentmc.data') }
     }
     maven {
@@ -91,8 +98,6 @@ processResources {
                        'description'                  : project.description,
                        "kotlin_fabric"                : kotlin_fabric,
                        "kotlin_forge"                 : kotlin_forge,
-                       'neoforge_version'             : neoforge_version,
-                       'neoforge_loader_version_range': neoforge_loader_version_range,
                        "forge_version"                : forge_version,
                        "forge_loader_version_range"   : forge_loader_version_range,
                        'credits'                      : credits,

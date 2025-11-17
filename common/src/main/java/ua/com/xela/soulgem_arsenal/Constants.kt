@@ -1,11 +1,11 @@
-package ua.com.xela.soulgem_arsenal;
+package ua.com.xela.soulgem_arsenal
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-public class Constants {
-
-    public static final String MOD_ID = "soulgem_arsenal";
-    public static final String MOD_NAME = "Soulgem Arsenal";
-    public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+object Constants {
+    const val MOD_ID: String = "soulgem_arsenal"
+    const val MOD_NAME: String = "Soulgem Arsenal"
+    @JvmField
+    val LOG: Logger = LoggerFactory.getLogger(MOD_NAME)
 }
