@@ -1,0 +1,15 @@
+plugins {
+    // see https://fabricmc.net/develop/ for new versions
+    id 'fabric-loom' version '1.13-SNAPSHOT' apply false
+    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
+    id 'net.neoforged.moddev' version '0.1.110' apply false
+    id 'org.jetbrains.kotlin.jvm' version "${kotlin}" apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlin}" apply false
+}
+
+allprojects {
+    configurations.configureEach {
+        exclude group: 'org.lwjgl', module: 'lwjgl-freetype'
+
+    }
+}
