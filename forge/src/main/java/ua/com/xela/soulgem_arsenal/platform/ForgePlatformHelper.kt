@@ -1,17 +1,66 @@
 package ua.com.xela.soulgem_arsenal.platform
 
+import com.mojang.serialization.Codec
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.item.Item
+import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.loading.FMLLoader
+import net.minecraftforge.registries.DeferredRegister
+import net.minecraftforge.registries.ForgeRegistries
+import net.minecraftforge.registries.RegistryObject
+import ua.com.xela.soulgem_arsenal.Constants
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
+import ua.com.xela.soulgem_arsenal.registries.ComponentRef
 
-class ForgePlatformHelper: IPlatformHelper {
+
+class ForgePlatformHelper : IPlatformHelper {
+    companion object Registry {
+        val items: DeferredRegister<Item?> = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID)
+        val dataComponents: DeferredRegister<DataComponentType<*>> =
+            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Constants.MOD_ID)
+
+
+        fun register(eventBus: IEventBus) {
+            items.register(eventBus)
+            dataComponents.register(eventBus)
+        }
+    }
+
     override val platformName: String
         get() = "Forge"
 
     override fun isModLoaded(modId: String?): Boolean {
-       return ModList.get().isLoaded(modId)
+        return ModList.get().isLoaded(modId)
     }
 
     override val isDevelopmentEnvironment: Boolean
         get() = !FMLLoader.isProduction()
+
+    override fun registerItem(id: String, item: () -> Item) {
+        items.register(id, item)
+    }
+
+    override fun <T : Any> registerDataComponent(
+        id: String,
+        codec: Codec<T>,
+        streamCodec: StreamCodec<RegistryFriendlyByteBuf, T>
+    ): ComponentRef<T> {
+        val regObj: RegistryObject<DataComponentType<T>> =
+            dataComponents.register(id) {
+                DataComponentType.builder<T>()
+                    .persistent(codec)
+                    .networkSynchronized(streamCodec)
+                    .build()
+            }
+
+        return object : ComponentRef<T> {
+            override fun get(): DataComponentType<T> {
+                return regObj.get()
+            }
+        }
+    }
 }

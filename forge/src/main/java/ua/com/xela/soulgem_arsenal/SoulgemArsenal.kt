@@ -13,6 +13,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import org.slf4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
+import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
+import ua.com.xela.soulgem_arsenal.registries.SkillComponents
 import kotlin.time.Duration.Companion.seconds
 
 @Mod(Constants.MOD_ID)
@@ -22,7 +24,9 @@ object SoulgemArsenal {
 
     init {
         LOGGER.info("Hello world!")
+        ForgePlatformHelper.register(MOD_BUS)
         Common.init()
+
         val obj = runForDist(
             clientTarget = {
                 MOD_BUS.addListener(::onClientSetup)
@@ -48,8 +52,9 @@ object SoulgemArsenal {
         // sample coroutines code
         CoroutineScope(Dispatchers.Default).launch {
             LOGGER.info("Before delay")
-            delay(5.seconds)
-            LOGGER.info("After 5 seconds")
+            delay(10.seconds)
+
+            LOGGER.info("After 5 seconds {}", SkillComponents.Teleport.get() )
         }
     }
 
