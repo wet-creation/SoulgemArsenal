@@ -5,6 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.Item
 import ua.com.xela.soulgem_arsenal.registries.ComponentRef
+import ua.com.xela.soulgem_arsenal.skills.Skill
 
 interface IPlatformHelper {
     val platformName: String
@@ -24,7 +25,7 @@ interface IPlatformHelper {
 
     fun registerItem(id: String, item: () -> Item)
 
-    fun <T : Any> registerDataComponent(
+    fun <T : Skill> registerDataComponent(
         id: String,
         codec: Codec<T>,
         streamCodec: StreamCodec<RegistryFriendlyByteBuf, T>

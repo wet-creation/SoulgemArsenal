@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item
 import ua.com.xela.soulgem_arsenal.Constants
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registries.ComponentRef
+import ua.com.xela.soulgem_arsenal.skills.Skill
 
 
 class FabricPlatformHelper : IPlatformHelper {
@@ -33,7 +34,7 @@ class FabricPlatformHelper : IPlatformHelper {
         Registry.register(BuiltInRegistries.ITEM, itemKey, item())
     }
 
-    override fun <T : Any> registerDataComponent(
+    override fun <T : Skill> registerDataComponent(
         id: String,
         codec: Codec<T>,
         streamCodec: StreamCodec<RegistryFriendlyByteBuf, T>

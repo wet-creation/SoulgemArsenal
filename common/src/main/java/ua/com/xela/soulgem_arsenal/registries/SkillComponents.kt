@@ -2,9 +2,11 @@ package ua.com.xela.soulgem_arsenal.registries
 
 import net.minecraft.core.component.DataComponentType
 import ua.com.xela.soulgem_arsenal.platform.Services
+import ua.com.xela.soulgem_arsenal.skills.Skill
 import ua.com.xela.soulgem_arsenal.skills.bow.TeleportSkill
+import kotlin.reflect.KClass
 
-interface ComponentRef<T> {
+interface ComponentRef<T : Skill> {
     fun get(): DataComponentType<T>
 }
 
@@ -12,11 +14,25 @@ object SkillComponents {
 
     lateinit var Teleport: ComponentRef<TeleportSkill>
         private set
+
+
+    private var skills: Map<KClass<out Skill>, ComponentRef<out Skill>> = mutableMapOf()
+
+    operator fun get(clazz: KClass<out Skill>): ComponentRef<out Skill>? {
+        return skills[clazz]
+    }
+
     fun register() {
         Teleport = Services.PLATFORM.registerDataComponent(
             "bow_skill_teleport",
             TeleportSkill.CODEC,
             TeleportSkill.STREAM_CODEC
         )
+
+        skills = buildMap {
+            put(TeleportSkill::class, Teleport)
+        }
+
     }
 }
+
