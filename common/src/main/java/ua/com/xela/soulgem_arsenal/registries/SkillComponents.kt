@@ -3,7 +3,7 @@ package ua.com.xela.soulgem_arsenal.registries
 import net.minecraft.core.component.DataComponentType
 import ua.com.xela.soulgem_arsenal.platform.Services
 import ua.com.xela.soulgem_arsenal.skills.Skill
-import ua.com.xela.soulgem_arsenal.skills.bow.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
 import kotlin.reflect.KClass
 
 interface ComponentRef<T : Skill> {
@@ -16,7 +16,7 @@ object SkillComponents {
         private set
 
 
-    private var skills: Map<KClass<out Skill>, ComponentRef<out Skill>> = mutableMapOf()
+    internal var skills: Map<KClass<out Skill>, ComponentRef<out Skill>> = mutableMapOf()
 
     operator fun get(clazz: KClass<out Skill>): ComponentRef<out Skill>? {
         return skills[clazz]

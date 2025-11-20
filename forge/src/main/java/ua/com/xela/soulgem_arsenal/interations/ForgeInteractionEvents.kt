@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import ua.com.xela.soulgem_arsenal.Constants
 import ua.com.xela.soulgem_arsenal.skills.armTeleportSkill
-import ua.com.xela.soulgem_arsenal.skills.bow.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
 import ua.com.xela.soulgem_arsenal.skills.hasTeleportSkill
 import ua.com.xela.soulgem_arsenal.skills.setSkill
 
@@ -21,18 +21,13 @@ object ForgeInteractionEvents {
         val level = event.level
         val stack = event.itemStack
 
-        // только серверная сторона
         if (level.isClientSide) return
 
-        // нужно зажатое приседание (Shift)
         if (!player.isShiftKeyDown) return
 
-        // нас интересует только лук
         if (stack.item !is BowItem) return
 
-        // у лука должен быть наш скилл
         if (!stack.hasTeleportSkill()) {
-            // временно: навесим скилл прямо тут, для тестов
             stack.setSkill(TeleportSkill(
                 enabled = true,
                 armed = true,
@@ -48,11 +43,9 @@ object ForgeInteractionEvents {
             return
         }
 
-        // пробуем "армировать" следующий выстрел
         val armed = stack.armTeleportSkill()
         if (!armed) return
 
-        // можно кинуть фидбек игроку
         player.displayClientMessage(
             Component.literal("Teleport shot armed"),
             true
