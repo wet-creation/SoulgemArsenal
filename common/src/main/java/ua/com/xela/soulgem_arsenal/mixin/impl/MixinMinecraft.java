@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.mixin;
+package ua.com.xela.soulgem_arsenal.mixin.impl;
 
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +12,6 @@ public class MixinMinecraft {
 
     @Inject(at = @At("TAIL"), method = "<init>")
     private void init(CallbackInfo info) {
-        Constants.LOG.info("This line is printed by the Soulgem Arsenal common mixin!");
-        Constants.LOG.info("MC Version: {}", Minecraft.getInstance().getVersionType());
+        Constants.LOG.info("Mixin loaded");
     }
 }

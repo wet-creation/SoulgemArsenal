@@ -1,33 +1,22 @@
 package ua.com.xela.soulgem_arsenal.core
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import ua.com.xela.soulgem_arsenal.platform.Services
 import ua.com.xela.soulgem_arsenal.core.Constants.LOG
-import ua.com.xela.soulgem_arsenal.registry.SkillComponents
+import ua.com.xela.soulgem_arsenal.platform.Services
 import ua.com.xela.soulgem_arsenal.registry.ModItems
+import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.base.SkillBehaviorRegistry
-import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkillBehavior
-import kotlin.time.Duration.Companion.seconds
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillBehavior
 
 
 object Common {
     fun init() {
         LOG.debug(
-            "Hello from Common init on {}! we are currently in a {} environment!",
+            "Mod initialized on {}!",
             Services.PLATFORM.platformName,
-            Services.PLATFORM.environmentName
         )
         ModItems.register()
         SkillComponents.register()
         registerSkillBehaviors()
-        CoroutineScope(Dispatchers.Default).launch {
-            LOG.info("Before delay")
-            delay(10.seconds)
-            LOG.info("After 5 seconds {}", SkillComponents.Teleport.get())
-        }
     }
 
     fun registerSkillBehaviors() {

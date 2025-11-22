@@ -1,6 +1,7 @@
 package ua.com.xela.soulgem_arsenal.skills.base
 
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.SkillBehavior
 import kotlin.reflect.KClass
 
 object SkillBehaviorRegistry {

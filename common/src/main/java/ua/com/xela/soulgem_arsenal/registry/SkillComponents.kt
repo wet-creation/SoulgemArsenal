@@ -2,8 +2,8 @@ package ua.com.xela.soulgem_arsenal.registry
 
 import net.minecraft.core.component.DataComponentType
 import ua.com.xela.soulgem_arsenal.platform.Services
-import ua.com.xela.soulgem_arsenal.skills.Skill
-import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import kotlin.reflect.KClass
 
 interface ComponentRef<T : Skill> {

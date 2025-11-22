@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
-import org.slf4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 import ua.com.xela.soulgem_arsenal.core.Common
@@ -13,10 +12,8 @@ import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
 
 @Mod(Constants.MOD_ID)
 object SoulgemArsenal {
-    val LOGGER: Logger = Constants.LOG
 
     init {
-        LOGGER.info("Hello world!")
         ForgePlatformHelper.register(MOD_BUS)
         Common.init()
 

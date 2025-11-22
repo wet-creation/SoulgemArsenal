@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.mixin;
+package ua.com.xela.soulgem_arsenal.mixin.impl;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.interations
+package ua.com.xela.soulgem_arsenal.interactions
 
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.entity.player.PlayerInteractEvent

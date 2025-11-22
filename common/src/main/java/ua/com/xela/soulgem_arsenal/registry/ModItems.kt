@@ -4,9 +4,9 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 import ua.com.xela.soulgem_arsenal.platform.Services
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.SkillEntry
-import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import ua.com.xela.soulgem_arsenal.skills.setSkill
 
 object ModItems {

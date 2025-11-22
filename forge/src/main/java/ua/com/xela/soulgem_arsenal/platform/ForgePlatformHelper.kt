@@ -15,7 +15,7 @@ import net.minecraftforge.registries.RegistryObject
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 
 class ForgePlatformHelper : IPlatformHelper {

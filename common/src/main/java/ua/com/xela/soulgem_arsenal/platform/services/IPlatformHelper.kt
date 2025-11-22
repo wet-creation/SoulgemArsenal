@@ -5,7 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.Item
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 interface IPlatformHelper {
     val platformName: String

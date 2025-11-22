@@ -1,10 +1,10 @@
-package ua.com.xela.soulgem_arsenal.skills.bow.telport
+package ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 
 data class TeleportSkill(

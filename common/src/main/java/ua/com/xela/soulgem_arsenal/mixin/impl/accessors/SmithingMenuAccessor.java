@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.mixin;
+package ua.com.xela.soulgem_arsenal.mixin.impl.accessors;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.ItemCombinerMenu;

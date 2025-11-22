@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.skills
+package ua.com.xela.soulgem_arsenal.skills.api
 
 interface Skill {
     val enabled: Boolean

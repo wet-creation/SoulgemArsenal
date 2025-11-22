@@ -6,7 +6,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.EntityHitResult
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 sealed interface SkillEventContext
 

@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.mixin_merge_logic;
+package ua.com.xela.soulgem_arsenal.mixin.api;
 
 
 import kotlin.reflect.KClass;

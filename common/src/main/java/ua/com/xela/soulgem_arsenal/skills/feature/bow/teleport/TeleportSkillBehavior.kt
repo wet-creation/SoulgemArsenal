@@ -1,14 +1,14 @@
-package ua.com.xela.soulgem_arsenal.skills.bow.telport
+package ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport
 
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.projectile.AbstractArrow
-import ua.com.xela.soulgem_arsenal.mixin_merge_logic.ModifiedPlayer
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.mixin.api.ModifiedPlayer
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.ActivationContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowBlockHitContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowEntityHitContext
 import ua.com.xela.soulgem_arsenal.skills.base.BowShotContext
-import ua.com.xela.soulgem_arsenal.skills.base.SkillBehavior
+import ua.com.xela.soulgem_arsenal.skills.api.SkillBehavior
 import ua.com.xela.soulgem_arsenal.skills.setSkill
 import kotlin.reflect.KClass
 

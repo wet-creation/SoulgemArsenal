@@ -1,6 +1,6 @@
 package ua.com.xela.soulgem_arsenal.skills.base
 
-import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import kotlin.reflect.KClass
 
 data class SkillEntry<T : Skill>(

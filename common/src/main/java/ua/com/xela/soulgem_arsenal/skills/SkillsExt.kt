@@ -4,7 +4,8 @@ package ua.com.xela.soulgem_arsenal.skills
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.world.item.ItemStack
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
-import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import kotlin.reflect.KClass
 
 inline fun <reified T : Skill> ItemStack.getSkill(): T? =

@@ -1,10 +1,10 @@
-package ua.com.xela.soulgem_arsenal.mixin;
+package ua.com.xela.soulgem_arsenal.mixin.impl;
 
 import kotlin.reflect.KClass;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import ua.com.xela.soulgem_arsenal.mixin_merge_logic.ModifiedPlayer;
+import ua.com.xela.soulgem_arsenal.mixin.api.ModifiedPlayer;
 
 import java.util.HashMap;
 
