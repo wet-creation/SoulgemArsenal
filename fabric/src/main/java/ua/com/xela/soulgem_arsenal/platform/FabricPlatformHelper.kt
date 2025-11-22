@@ -11,9 +11,9 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
-import ua.com.xela.soulgem_arsenal.Constants
+import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
-import ua.com.xela.soulgem_arsenal.registries.ComponentRef
+import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.Skill
 
 

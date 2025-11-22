@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.registries
+package ua.com.xela.soulgem_arsenal.registry
 
 import net.minecraft.core.component.DataComponentType
 import ua.com.xela.soulgem_arsenal.platform.Services

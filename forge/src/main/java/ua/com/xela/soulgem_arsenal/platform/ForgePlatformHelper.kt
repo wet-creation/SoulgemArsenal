@@ -12,9 +12,9 @@ import net.minecraftforge.fml.loading.FMLLoader
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
-import ua.com.xela.soulgem_arsenal.Constants
+import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
-import ua.com.xela.soulgem_arsenal.registries.ComponentRef
+import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.Skill
 
 

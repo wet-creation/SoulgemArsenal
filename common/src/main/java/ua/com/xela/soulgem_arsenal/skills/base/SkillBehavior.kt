@@ -11,4 +11,6 @@ interface SkillBehavior<T : Skill> {
     fun onArrowBlockHitGlobal(ctx: ArrowBlockHitContext) {}
 
     fun onArrowEntityHitGlobal(ctx: ArrowEntityHitContext) {}
+
+    fun onActivate(ctx: ActivationContext): Skill?
 }

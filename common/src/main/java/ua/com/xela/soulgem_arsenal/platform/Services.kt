@@ -1,6 +1,6 @@
 package ua.com.xela.soulgem_arsenal.platform
 
-import ua.com.xela.soulgem_arsenal.Constants
+import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
 import java.util.*
 

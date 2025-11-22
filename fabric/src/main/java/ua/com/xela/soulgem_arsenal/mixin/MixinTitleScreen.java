@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ua.com.xela.soulgem_arsenal.Constants;
+import ua.com.xela.soulgem_arsenal.core.Constants;
 
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen {

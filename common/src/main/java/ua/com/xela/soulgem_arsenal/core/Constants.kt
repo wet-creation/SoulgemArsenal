@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal
+package ua.com.xela.soulgem_arsenal.core
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

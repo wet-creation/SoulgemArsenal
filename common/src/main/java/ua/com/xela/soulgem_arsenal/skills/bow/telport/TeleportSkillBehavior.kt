@@ -3,6 +3,8 @@ package ua.com.xela.soulgem_arsenal.skills.bow.telport
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.projectile.AbstractArrow
 import ua.com.xela.soulgem_arsenal.mixin_merge_logic.ModifiedPlayer
+import ua.com.xela.soulgem_arsenal.skills.Skill
+import ua.com.xela.soulgem_arsenal.skills.base.ActivationContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowBlockHitContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowEntityHitContext
 import ua.com.xela.soulgem_arsenal.skills.base.BowShotContext
@@ -42,6 +44,21 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
             arrow = ctx.arrow,
             shooter = ctx.shooter
         )
+    }
+
+    override fun onActivate(ctx: ActivationContext): Skill? {
+        val skill = ctx.skill as? TeleportSkill ?: return null
+
+        if (!skill.enabled) return null
+        if (skill.charges <= 0) return null
+        if (!ctx.isSneaking) return null
+
+        val newSkill = skill.copy(
+            armed = !skill.armed
+        )
+
+
+        return newSkill
     }
 
     private fun teleportToTarget(

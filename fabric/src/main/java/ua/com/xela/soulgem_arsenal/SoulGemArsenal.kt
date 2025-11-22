@@ -2,55 +2,32 @@ package ua.com.xela.soulgem_arsenal
 
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.player.UseItemCallback
-import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.item.BowItem
-import ua.com.xela.soulgem_arsenal.skills.armTeleportSkill
-import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
-import ua.com.xela.soulgem_arsenal.skills.getSkill
+import ua.com.xela.soulgem_arsenal.core.Common
+import ua.com.xela.soulgem_arsenal.skills.base.SkillEvents
 
 object SoulGemArsenal : ModInitializer {
 
     override fun onInitialize() {
         Common.init()
 
-        UseItemCallback.EVENT.register(UseItemCallback { player, world, _ ->
+        UseItemCallback.EVENT.register(UseItemCallback { player, world, hand ->
             val stack = player.mainHandItem ?: player.offhandItem
 
-            // клиент нам не нужен
-            if (world.isClientSide) {
+            if (world.isClientSide || player !is ServerPlayer) {
                 return@UseItemCallback InteractionResultHolder.pass(stack)
             }
 
-            // нужен Shift
-            if (!player.isCrouching) {
-                return@UseItemCallback InteractionResultHolder.pass(stack)
-            }
-
-            // интересует только лук
-            if (stack.item !is BowItem) {
-                return@UseItemCallback InteractionResultHolder.pass(stack)
-            }
-
-            // если скилла ещё нет — повесим его (как мы делали на Forge для теста)
-
-            stack.getSkill<TeleportSkill>() ?: return@UseItemCallback InteractionResultHolder.pass(stack)
-
-
-            // если уже есть — армируем следующий выстрел
-            val armed = stack.armTeleportSkill()
-            if (!armed) {
-                player.sendSystemMessage(
-                    Component.literal("No charges left")
-                )
-                return@UseItemCallback InteractionResultHolder.pass(stack)
-            }
-
-            player.sendSystemMessage(
-                Component.literal("Next shot will teleport you")
+            SkillEvents.onSkillActivate(
+                player,
+                stack = stack,
+                hand = hand,
+                isSneaking = player.isCrouching,
             )
 
-            InteractionResultHolder.pass(stack)
+            return@UseItemCallback InteractionResultHolder.pass(stack)
+            
         })
     }
 }

@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ua.com.xela.soulgem_arsenal.Constants;
-import ua.com.xela.soulgem_arsenal.registries.SkillAttachItems;
-import ua.com.xela.soulgem_arsenal.registries.SkillComponents;
+import ua.com.xela.soulgem_arsenal.core.Constants;
+import ua.com.xela.soulgem_arsenal.registry.SkillAttachItems;
+import ua.com.xela.soulgem_arsenal.registry.SkillComponents;
 
 @Mixin(SmithingMenu.class)
 public abstract class SmithingMenuMixin {

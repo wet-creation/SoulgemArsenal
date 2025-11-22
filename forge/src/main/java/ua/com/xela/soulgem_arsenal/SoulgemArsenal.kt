@@ -7,6 +7,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import org.slf4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
+import ua.com.xela.soulgem_arsenal.core.Common
+import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
 
 @Mod(Constants.MOD_ID)

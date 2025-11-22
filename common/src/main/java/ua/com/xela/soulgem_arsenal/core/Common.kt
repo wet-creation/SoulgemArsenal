@@ -1,15 +1,13 @@
-package ua.com.xela.soulgem_arsenal
+package ua.com.xela.soulgem_arsenal.core
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.projectile.AbstractArrow
 import ua.com.xela.soulgem_arsenal.platform.Services
-import ua.com.xela.soulgem_arsenal.Constants.LOG
-import ua.com.xela.soulgem_arsenal.registries.SkillComponents
-import ua.com.xela.soulgem_arsenal.registries.ModItems
+import ua.com.xela.soulgem_arsenal.core.Constants.LOG
+import ua.com.xela.soulgem_arsenal.registry.SkillComponents
+import ua.com.xela.soulgem_arsenal.registry.ModItems
 import ua.com.xela.soulgem_arsenal.skills.base.SkillBehaviorRegistry
 import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkillBehavior
 import kotlin.time.Duration.Companion.seconds

@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.Item
-import ua.com.xela.soulgem_arsenal.registries.ComponentRef
+import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.Skill
 
 interface IPlatformHelper {

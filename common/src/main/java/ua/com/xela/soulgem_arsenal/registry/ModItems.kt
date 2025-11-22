@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.registries
+package ua.com.xela.soulgem_arsenal.registry
 
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
