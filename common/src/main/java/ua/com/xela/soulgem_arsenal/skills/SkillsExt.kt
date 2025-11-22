@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package ua.com.xela.soulgem_arsenal.skills
 
 import net.minecraft.core.component.DataComponentType
@@ -15,7 +17,6 @@ fun <T : Skill> ItemStack.getSkill(klass: KClass<T>): T? {
 }
 
 inline fun <reified T : Skill> ItemStack.setSkill(newState: T) {
-    @Suppress("UNCHECKED_CAST")
     val component = SkillComponents[T::class]?.get() as? DataComponentType<T> ?: return
     this.set(
         component,
@@ -23,10 +24,15 @@ inline fun <reified T : Skill> ItemStack.setSkill(newState: T) {
     )
 }
 
+fun <T : Skill> ItemStack.setSkill(clazz: KClass<T>, newState: T) {
+    val component = SkillComponents[clazz]?.get() as? DataComponentType<T> ?: return
+    this.set(component, newState)
+}
+
 
 fun ItemStack.hasTeleportSkill(): Boolean {
     val data = getSkill<TeleportSkill>() ?: return false
-    return data.armAndEnabled && data.charges > 0
+    return data.armedOrEnabled && data.charges > 0
 }
 
 fun ItemStack.armTeleportSkill(): Boolean {

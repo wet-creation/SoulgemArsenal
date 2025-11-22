@@ -16,22 +16,22 @@ public class ServerPlayerModifiedMixin implements ModifiedPlayer {
 
 
     @Override
-    public <T> void soulgem$SkillsSwitch(KClass<T> skill) {
+    public <T> void soulgem_SkillsSwitch(KClass<T> skill) {
         soulgem$Skills.compute(skill.getSimpleName(), (k, value) -> Boolean.FALSE.equals(value));
     }
 
     @Override
-    public <T> void soulgem$SkillsPut(KClass<T> skill, boolean value) {
+    public <T> void soulgem_SkillsPut(KClass<T> skill, boolean value) {
         soulgem$Skills.put(skill.getSimpleName(), value);
     }
 
     @Override
-    public <T> boolean soulgem$SkillsGet(KClass<T> skill) {
+    public <T> boolean soulgem_SkillsGet(KClass<T> skill) {
         return Boolean.TRUE.equals(soulgem$Skills.get(skill.getSimpleName()));
     }
 
     @Override
-    public <T> boolean soulgem$SHasKey(KClass<T> skill) {
+    public <T> boolean soulgem_HasKey(KClass<T> skill) {
         return soulgem$Skills.get(skill.getSimpleName()) != null;
 
     }

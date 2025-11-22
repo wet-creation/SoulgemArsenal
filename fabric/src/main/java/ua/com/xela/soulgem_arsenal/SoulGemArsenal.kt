@@ -8,7 +8,6 @@ import net.minecraft.world.item.BowItem
 import ua.com.xela.soulgem_arsenal.skills.armTeleportSkill
 import ua.com.xela.soulgem_arsenal.skills.bow.telport.TeleportSkill
 import ua.com.xela.soulgem_arsenal.skills.getSkill
-import ua.com.xela.soulgem_arsenal.skills.setSkill
 
 object SoulGemArsenal : ModInitializer {
 
@@ -34,23 +33,9 @@ object SoulGemArsenal : ModInitializer {
             }
 
             // если скилла ещё нет — повесим его (как мы делали на Forge для теста)
-            val teleportSkill =
-                stack.getSkill<TeleportSkill>() ?: return@UseItemCallback InteractionResultHolder.pass(stack)
-            if (teleportSkill.enabled.not() || teleportSkill.charges <= 0) {
-                stack.setSkill(
-                    TeleportSkill(
-                        enabled = true,
-                        charges = 3,
-                        armed = false
-                    )
-                )
 
-                player.sendSystemMessage(
-                    Component.literal("Teleport skill installed on this bow")
-                )
+            stack.getSkill<TeleportSkill>() ?: return@UseItemCallback InteractionResultHolder.pass(stack)
 
-                return@UseItemCallback InteractionResultHolder.pass(stack)
-            }
 
             // если уже есть — армируем следующий выстрел
             val armed = stack.armTeleportSkill()

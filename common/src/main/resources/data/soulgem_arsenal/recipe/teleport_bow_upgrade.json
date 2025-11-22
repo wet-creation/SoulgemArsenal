@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "soulgem_arsenal:skill_template"
+  },
+  "base": {
+    "tag": "soulgem_arsenal:base/items_bows"
+  },
+  "addition": {
+    "tag": "soulgem_arsenal:skills/bow_skills"
+  },
+  "result": {
+    "id": "minecraft:bow",
+    "count": 1
+  }
+}

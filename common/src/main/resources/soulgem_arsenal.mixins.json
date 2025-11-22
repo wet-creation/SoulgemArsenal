@@ -7,7 +7,9 @@
   "mixins": [
     "AbstractArrowMixin",
     "BowItemMixin",
-    "ServerPlayerModifiedMixin"
+    "ServerPlayerModifiedMixin",
+    "SmithingMenuAccessor",
+    "SmithingMenuMixin"
   ],
   "client": [
     "MixinMinecraft"

@@ -16,7 +16,7 @@ object SkillComponents {
         private set
 
 
-    internal var skills: Map<KClass<out Skill>, ComponentRef<out Skill>> = mutableMapOf()
+    lateinit var skills: Map<KClass<out Skill>, ComponentRef<out Skill>>
 
     operator fun get(clazz: KClass<out Skill>): ComponentRef<out Skill>? {
         return skills[clazz]

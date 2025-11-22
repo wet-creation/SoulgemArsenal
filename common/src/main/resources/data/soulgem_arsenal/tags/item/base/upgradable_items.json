@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#soulgem_arsenal:base/skill_bows",
+    "#soulgem_arsenal:base/skill_swords",
+    "#soulgem_arsenal:base/skill_tools"
+  ]
+}

@@ -21,7 +21,7 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
         if (player !is ModifiedPlayer) return
 
-        player.`soulgem$SkillsPut`(skillClass, true)
+        player.soulgem_SkillsPut(skillClass, true)
 
         val newState = skill.copy(
             armed = false,
@@ -50,11 +50,11 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
     ) {
         val teleShooter = shooter as ModifiedPlayer
 
-        if (teleShooter.`soulgem$SkillsGet`(skillClass).not()) return
+        if (teleShooter.soulgem_SkillsGet(skillClass).not()) return
 
         val arrow = arrow
         shooter.teleportTo(arrow.x, arrow.y, arrow.z)
 
-        shooter.`soulgem$SkillsPut`(skillClass, false)
+        shooter.soulgem_SkillsPut(skillClass, false)
     }
 }
