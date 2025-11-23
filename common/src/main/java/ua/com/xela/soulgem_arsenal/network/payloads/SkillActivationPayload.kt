@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.network.packets
+package ua.com.xela.soulgem_arsenal.network.payloads
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec

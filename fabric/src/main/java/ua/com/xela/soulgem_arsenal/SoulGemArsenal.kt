@@ -19,6 +19,5 @@ object SoulGemArsenal : ModInitializer {
 
 
 
-
     }
 }

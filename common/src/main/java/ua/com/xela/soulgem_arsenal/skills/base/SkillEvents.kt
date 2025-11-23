@@ -54,25 +54,19 @@ object SkillEvents {
     fun onSkillActivate(
         player: ServerPlayer,
     ) {
-        val stack: ItemStack = when {
-            !player.mainHandItem.isEmpty -> player.mainHandItem
-            !player.offhandItem.isEmpty -> player.offhandItem
-            else -> return
-        }
-        val hand = if (stack === player.mainHandItem) InteractionHand.MAIN_HAND else InteractionHand.OFF_HAND
-        val (skillClass, skill) = findSkillOnItem(stack) ?: return
-        val behavior = SkillBehaviorRegistry.getByClass(skillClass) ?: return
+        val found = findSkillOnPlayerHands(player) ?: return
+        val behavior = SkillBehaviorRegistry.getByClass(found.skillClass) ?: return
 
         val ctx = ActivationContext(
             player = player,
-            stack = stack,
-            skill = skill,
-            hand = hand,
+            stack = found.stack,
+            skill = found.skill,
+            hand = found.hand,
             isSneaking = player.isCrouching
         )
 
         val updated = behavior.onActivate(ctx) ?: return
-        stack.setSkillDynamic(skillClass, updated)
+        found.stack.setSkillDynamic(found.skillClass, updated)
     }
 
     fun findSkillOnItem(stack: ItemStack): Pair<KClass<out Skill>, Skill>? {
@@ -83,6 +77,34 @@ object SkillEvents {
             return clazz to skill
         }
         return null
+    }
+
+    private data class FoundSkill(
+        val hand: InteractionHand,
+        val stack: ItemStack,
+        val skillClass: KClass<out Skill>,
+        val skill: Skill,
+    )
+
+    // Returns first skill found on main/off hand or null
+    private fun findSkillOnPlayerHands(player: ServerPlayer): FoundSkill? {
+        val candidates = listOf(
+            InteractionHand.MAIN_HAND to player.mainHandItem,
+            InteractionHand.OFF_HAND to player.offhandItem,
+        )
+
+        return candidates.firstNotNullOfOrNull { (hand, stack) ->
+            if (stack.isEmpty) return@firstNotNullOfOrNull null
+
+            val (skillClass, skill) = findSkillOnItem(stack) ?: return@firstNotNullOfOrNull null
+
+            FoundSkill(
+                hand = hand,
+                stack = stack,
+                skillClass = skillClass,
+                skill = skill,
+            )
+        }
     }
 
 }

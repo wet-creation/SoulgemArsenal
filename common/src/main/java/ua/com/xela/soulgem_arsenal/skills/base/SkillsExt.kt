@@ -2,7 +2,6 @@ package ua.com.xela.soulgem_arsenal.skills.base
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.world.item.ItemStack
-import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import kotlin.reflect.KClass
@@ -36,7 +35,6 @@ fun ItemStack.setSkillDynamic(clazz: KClass<out Skill>, newState: Skill) {
 
     @Suppress("UNCHECKED_CAST")
     this.set(componentAny, newState as Any)
-    Constants.LOG.info("new skill state {}", {newState})
 
 }
 

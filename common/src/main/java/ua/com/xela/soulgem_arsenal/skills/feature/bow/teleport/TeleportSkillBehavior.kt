@@ -1,6 +1,7 @@
 package ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport
 
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.ItemStack
 import ua.com.xela.soulgem_arsenal.mixin.api.ModifiedPlayer
@@ -19,6 +20,19 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
     override val skillClass: KClass<TeleportSkill> = TeleportSkill::class
 
+    override fun onActivate(ctx: ActivationContext): Skill? {
+        val skill = ctx.skill as? TeleportSkill ?: return null
+
+        if (!skill.selected) return null
+        if (skill.charges <= 0) return null
+
+        val newSkill = skill.copy(
+            armed = !skill.armed
+        )
+
+        return newSkill
+    }
+
     override fun onBowShot(skill: TeleportSkill, ctx: BowShotContext) {
         val player = ctx.player
 
@@ -27,12 +41,22 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
         if (player !is ModifiedPlayer) return
 
         player.soulgem_SkillsPut(skillClass, true)
-
         val newState = skill.copy(
             armed = false,
             charges = skill.charges - 1
         )
+        val hand =
+            if (player.mainHandItem === ctx.stack) InteractionHand.MAIN_HAND
+            else if (player.offhandItem === ctx.stack) InteractionHand.OFF_HAND
+            else error("item is not REEEEEAAAAAAL")
         ctx.stack.setSkill(newState)
+        TeleportSkillCooldown.startForStack(
+            stack = ctx.stack,
+            player = player,
+            hand = hand,
+            skill = newState
+        )
+
     }
 
     override fun onArrowBlockHitGlobal(ctx: ArrowBlockHitContext) {
@@ -49,20 +73,6 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
         )
     }
 
-    override fun onActivate(ctx: ActivationContext): Skill? {
-        val skill = ctx.skill as? TeleportSkill ?: return null
-
-        if (!skill.selected) return null
-        if (skill.charges <= 0) return null
-
-        val newSkill = skill.copy(
-            armed = !skill.armed
-        )
-
-
-        return newSkill
-    }
-
     private fun teleportToTarget(
         arrow: AbstractArrow,
         shooter: ServerPlayer
@@ -71,7 +81,6 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
         if (teleShooter.soulgem_SkillsGet(skillClass).not()) return
 
-        val arrow = arrow
         shooter.teleportTo(arrow.x, arrow.y, arrow.z)
 
         shooter.soulgem_SkillsPut(skillClass, false)

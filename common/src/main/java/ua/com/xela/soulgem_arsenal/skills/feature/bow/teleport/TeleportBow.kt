@@ -11,40 +11,24 @@ data class TeleportSkill(
     override val selected: Boolean,
     override val armed: Boolean,
     override val charges: Int,
-    override val cooldown: Int
+    override val cooldown: Int,
+    override val maxCooldown: Int
 ) : Skill {
 
     val armedOrEnabled = selected || armed
     val armedAndEnabled = selected && armed
-
-    class Builder(origin: TeleportSkill) {
-        var enabled: Boolean = origin.selected
-        var armed: Boolean = origin.armed
-        var charges: Int = origin.charges
-        var cooldown: Int = origin.cooldown
-
-        fun enabled(p: Boolean) = this.also { enabled = p }
-        fun charges(p: Int) = this.also { charges = p }
-        fun cooldown(p: Int) = this.also { cooldown = p }
-        fun armed(p: Boolean) = this.also { armed = p }
-
-        fun build(): TeleportSkill {
-            return TeleportSkill(
-                selected = enabled,
-                armed = armed,
-                charges = charges,
-                cooldown = cooldown
-            )
-        }
-    }
+    val canTeleport = charges > 0 || cooldown == 0
 
     companion object {
+        val KEY = Skill.createKey(TeleportSkill::class)
+
         val CODEC: Codec<TeleportSkill> = RecordCodecBuilder.create { inst ->
             inst.group(
-                Codec.BOOL.fieldOf("enabled").forGetter(TeleportSkill::selected),
+                Codec.BOOL.fieldOf("selected").forGetter(TeleportSkill::selected),
                 Codec.BOOL.fieldOf("armed").forGetter(TeleportSkill::armed),
                 Codec.INT.fieldOf("charges").forGetter(TeleportSkill::charges),
                 Codec.INT.fieldOf("cooldown").forGetter(TeleportSkill::cooldown),
+                Codec.INT.fieldOf("maxCooldown").forGetter(TeleportSkill::maxCooldown),
             ).apply(inst, ::TeleportSkill)
         }
 
@@ -55,13 +39,15 @@ data class TeleportSkill(
                     buf.writeBoolean(value.armed)
                     buf.writeVarInt(value.charges)
                     buf.writeVarInt(value.cooldown)
+                    buf.writeVarInt(value.maxCooldown)
                 },
                 { buf ->
                     val enabled = buf.readBoolean()
                     val armed = buf.readBoolean()
                     val charges = buf.readVarInt()
                     val cooldown = buf.readVarInt()
-                    TeleportSkill(enabled, armed, charges, cooldown)
+                    val maxCooldown = buf.readVarInt()
+                    TeleportSkill(enabled, armed, charges, cooldown, maxCooldown)
                 }
             )
     }

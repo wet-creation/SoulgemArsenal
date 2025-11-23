@@ -9,11 +9,11 @@ import kotlin.reflect.KClass
 interface SkillBehavior<T : Skill> {
     val skillClass: KClass<T>
 
+    fun onActivate(ctx: ActivationContext): Skill?
+
     fun onBowShot(skill: T, ctx: BowShotContext) {}
 
     fun onArrowBlockHitGlobal(ctx: ArrowBlockHitContext) {}
 
     fun onArrowEntityHitGlobal(ctx: ArrowEntityHitContext) {}
-
-    fun onActivate(ctx: ActivationContext): Skill?
 }

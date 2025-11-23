@@ -10,6 +10,8 @@ import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillBeha
 
 
 object Common {
+   private val keys: MutableMap<String, Int> = mutableMapOf()
+
     fun init() {
         ModItems.register()
         SkillComponents.register()
@@ -25,6 +27,10 @@ object Common {
     }
 
     fun createResourceLocation(name: String): ResourceLocation {
+
+        val v = keys[name]
+        if (v != null) error("This resource $name is already existed")
+        keys[name] = 0
         return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name)
     }
 }
