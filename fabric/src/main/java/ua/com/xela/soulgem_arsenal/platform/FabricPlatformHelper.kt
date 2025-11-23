@@ -12,9 +12,8 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
-import ua.com.xela.soulgem_arsenal.core.Constants
+import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
@@ -33,7 +32,7 @@ class FabricPlatformHelper : IPlatformHelper {
         get() = FabricLoader.getInstance().isDevelopmentEnvironment
 
     override fun registerItem(id: String, item: () -> Item) {
-        val itemKey = ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, id))
+        val itemKey = ResourceKey.create(Registries.ITEM, Common.createResourceLocation(id))
         Registry.register(BuiltInRegistries.ITEM, itemKey, item())
     }
 
@@ -48,7 +47,7 @@ class FabricPlatformHelper : IPlatformHelper {
             .build()
         val key = ResourceKey.create(
             Registries.DATA_COMPONENT_TYPE,
-            ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, id)
+            Common.createResourceLocation(id)
         )
         val registered = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,

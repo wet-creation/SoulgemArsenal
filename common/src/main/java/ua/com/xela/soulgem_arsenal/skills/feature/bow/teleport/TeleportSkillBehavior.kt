@@ -2,14 +2,17 @@ package ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport
 
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.projectile.AbstractArrow
+import net.minecraft.world.item.ItemStack
 import ua.com.xela.soulgem_arsenal.mixin.api.ModifiedPlayer
+import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.ActivationContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowBlockHitContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowEntityHitContext
 import ua.com.xela.soulgem_arsenal.skills.base.BowShotContext
 import ua.com.xela.soulgem_arsenal.skills.api.SkillBehavior
-import ua.com.xela.soulgem_arsenal.skills.setSkill
+import ua.com.xela.soulgem_arsenal.skills.base.getSkill
+import ua.com.xela.soulgem_arsenal.skills.base.setSkill
 import kotlin.reflect.KClass
 
 object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
@@ -73,4 +76,24 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
         shooter.soulgem_SkillsPut(skillClass, false)
     }
+}
+
+fun ItemStack.hasTeleportSkill(): Boolean {
+    val data = getSkill<TeleportSkill>() ?: return false
+    return data.armedOrEnabled && data.charges > 0
+}
+
+fun ItemStack.armTeleportSkill(): Boolean {
+    val data = getSkill<TeleportSkill>() ?: return false
+    if (!data.selected || data.charges <= 0) return false
+
+    val updated = data.copy(armed = true)
+    this.set(SkillComponents.Teleport.get(), updated)
+    return true
+}
+
+fun ItemStack.disarmTeleportSkill() {
+    val data = getSkill<TeleportSkill>() ?: return
+    if (!data.armed) return
+    this.set(SkillComponents.Teleport.get(), data.copy(armed = false))
 }

@@ -9,7 +9,6 @@ import net.minecraft.world.phys.EntityHitResult
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
-import ua.com.xela.soulgem_arsenal.skills.setSkillDynamic
 import kotlin.reflect.KClass
 
 object SkillEvents {

@@ -22,7 +22,8 @@ import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 class ForgePlatformHelper : IPlatformHelper {
     companion object Registry {
-        val items: DeferredRegister<Item?> = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID)
+        val items: DeferredRegister<Item?> =
+            DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID)
         val dataComponents: DeferredRegister<DataComponentType<*>> =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Constants.MOD_ID)
 

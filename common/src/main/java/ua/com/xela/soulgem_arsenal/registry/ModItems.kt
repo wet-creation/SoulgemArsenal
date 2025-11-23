@@ -7,7 +7,7 @@ import ua.com.xela.soulgem_arsenal.platform.Services
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.SkillEntry
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
-import ua.com.xela.soulgem_arsenal.skills.setSkill
+import ua.com.xela.soulgem_arsenal.skills.base.setSkill
 
 object ModItems {
 

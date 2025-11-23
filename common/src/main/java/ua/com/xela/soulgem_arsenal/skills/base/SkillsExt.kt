@@ -1,12 +1,10 @@
-
-package ua.com.xela.soulgem_arsenal.skills
+package ua.com.xela.soulgem_arsenal.skills.base
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.world.item.ItemStack
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import kotlin.reflect.KClass
 
 inline fun <reified T : Skill> ItemStack.getSkill(): T? =
@@ -44,22 +42,3 @@ fun ItemStack.setSkillDynamic(clazz: KClass<out Skill>, newState: Skill) {
 
 
 
-fun ItemStack.hasTeleportSkill(): Boolean {
-    val data = getSkill<TeleportSkill>() ?: return false
-    return data.armedOrEnabled && data.charges > 0
-}
-
-fun ItemStack.armTeleportSkill(): Boolean {
-    val data = getSkill<TeleportSkill>() ?: return false
-    if (!data.selected || data.charges <= 0) return false
-
-    val updated = data.copy(armed = true)
-    this.set(SkillComponents.Teleport.get(), updated)
-    return true
-}
-
-fun ItemStack.disarmTeleportSkill() {
-    val data = getSkill<TeleportSkill>() ?: return
-    if (!data.armed) return
-    this.set(SkillComponents.Teleport.get(), data.copy(armed = false))
-}

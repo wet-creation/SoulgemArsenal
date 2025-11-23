@@ -13,6 +13,7 @@ import thedarkcolour.kotlinforforge.forge.runForDist
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
+import ua.com.xela.soulgem_arsenal.platform.Services
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 
 
@@ -34,9 +35,7 @@ object SoulgemArsenal {
                 "test"
             }
         )
-        SoulgemNetworkingForge.register()
     }
-
 
 
     private fun onClientSetup(event: FMLClientSetupEvent) {
@@ -56,8 +55,8 @@ object SoulgemArsenal {
         if (event.phase == TickEvent.Phase.END) {
             val mc = Minecraft.getInstance()
             if (mc.player == null) return
-            while (KeyBinds.ActivateSkill.consumeClick()) {
-                SoulgemNetworkingForge.sendSkillActivate()
+            if (KeyBinds.ActivateSkill.consumeClick()) {
+                Services.NETWORK.sendActivateSkill()
             }
         }
     }

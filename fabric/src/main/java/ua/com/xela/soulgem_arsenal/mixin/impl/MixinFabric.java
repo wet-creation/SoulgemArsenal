@@ -1,16 +1,16 @@
 package ua.com.xela.soulgem_arsenal.mixin.impl;
 
-import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ua.com.xela.soulgem_arsenal.core.Constants;
 
-@Mixin(TitleScreen.class)
-public class MixinTitleScreen {
+@Mixin(Minecraft.class)
+public class MixinFabric {
 
-    @Inject(at = @At("HEAD"), method = "init()V")
+    @Inject(at = @At("TAIL"), method = "<init>")
     private void init(CallbackInfo info) {
         Constants.LOG.info("Mixin initialized on Fabric!");
     }

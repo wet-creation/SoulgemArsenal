@@ -6,7 +6,6 @@ import net.minecraft.client.KeyMapping
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.Item
-import org.lwjgl.glfw.GLFW
 import ua.com.xela.soulgem_arsenal.platform.Platform
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.api.Skill

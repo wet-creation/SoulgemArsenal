@@ -1,14 +1,14 @@
-package ua.com.xela.soulgem_arsenal
+package ua.com.xela.soulgem_arsenal.platform
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import ua.com.xela.soulgem_arsenal.network.packets.SkillActivationPayload
+import ua.com.xela.soulgem_arsenal.platform.services.INetworkService
 import ua.com.xela.soulgem_arsenal.skills.base.SkillEvents
 
-object SoulgemNetworkingFabric {
-
-    fun registerReceivers() {
+class FabricaNetworkService : INetworkService {
+    override fun registerReceivers() {
         PayloadTypeRegistry.playC2S().register(
             SkillActivationPayload.TYPE,
             SkillActivationPayload.CODEC
@@ -23,9 +23,7 @@ object SoulgemNetworkingFabric {
         }
     }
 
-    fun sendSkillActivate() {
+    override fun sendActivateSkill() {
         ClientPlayNetworking.send(SkillActivationPayload)
     }
 }
-
-

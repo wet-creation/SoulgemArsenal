@@ -4,12 +4,11 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceLocation
-import ua.com.xela.soulgem_arsenal.core.Constants
+import ua.com.xela.soulgem_arsenal.core.Common
 
 object SkillActivationPayload : CustomPacketPayload {
 
-    val ID: ResourceLocation =
-        ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "skill_activate")
+    val ID: ResourceLocation = Common.createResourceLocation("skill_activate")
 
     val TYPE: CustomPacketPayload.Type<SkillActivationPayload> =
         CustomPacketPayload.Type(ID)
