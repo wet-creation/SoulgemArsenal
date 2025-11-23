@@ -19,7 +19,7 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
     override fun onBowShot(skill: TeleportSkill, ctx: BowShotContext) {
         val player = ctx.player
 
-        if (!skill.enabled || !skill.armed || skill.charges <= 0) return
+        if (!skill.selected || !skill.armed || skill.charges <= 0) return
 
         if (player !is ModifiedPlayer) return
 
@@ -49,9 +49,8 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
     override fun onActivate(ctx: ActivationContext): Skill? {
         val skill = ctx.skill as? TeleportSkill ?: return null
 
-        if (!skill.enabled) return null
+        if (!skill.selected) return null
         if (skill.charges <= 0) return null
-        if (!ctx.isSneaking) return null
 
         val newSkill = skill.copy(
             armed = !skill.armed

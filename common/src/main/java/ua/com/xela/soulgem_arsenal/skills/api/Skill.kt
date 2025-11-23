@@ -1,7 +1,8 @@
 package ua.com.xela.soulgem_arsenal.skills.api
 
 interface Skill {
-    val enabled: Boolean
+    //player selected
+    val selected: Boolean
     //is ready for use
     val armed: Boolean
     //cooldown in seconds for next recharge

@@ -1,4 +1,12 @@
 {
   "item.soulgem_arsenal.teleport_gem": "Teleport Gem",
-  "item.soulgem_arsenal.skill_template": "Skill Template"
+  "item.soulgem_arsenal.skill_template": "Skill Template",
+
+
+
+
+
+
+  "key.categories.soulgem_arsenal.keybinding_category": "Soulgem Arsenal",
+  "key.soulgem_arsenal.activate_skill": "Activate Skill"
 }

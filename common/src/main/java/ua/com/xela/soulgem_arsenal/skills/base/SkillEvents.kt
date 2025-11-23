@@ -54,10 +54,13 @@ object SkillEvents {
 
     fun onSkillActivate(
         player: ServerPlayer,
-        stack: ItemStack,
-        hand: InteractionHand,
-        isSneaking: Boolean
     ) {
+        val stack: ItemStack = when {
+            !player.mainHandItem.isEmpty -> player.mainHandItem
+            !player.offhandItem.isEmpty -> player.offhandItem
+            else -> return
+        }
+        val hand = if (stack === player.mainHandItem) InteractionHand.MAIN_HAND else InteractionHand.OFF_HAND
         val (skillClass, skill) = findSkillOnItem(stack) ?: return
         val behavior = SkillBehaviorRegistry.getByClass(skillClass) ?: return
 
@@ -66,7 +69,7 @@ object SkillEvents {
             stack = stack,
             skill = skill,
             hand = hand,
-            isSneaking = isSneaking
+            isSneaking = player.isCrouching
         )
 
         val updated = behavior.onActivate(ctx) ?: return

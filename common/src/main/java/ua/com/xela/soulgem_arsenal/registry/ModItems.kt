@@ -46,7 +46,7 @@ object SkillAttachItems {
             TeleportSkill::class
         ) {
             TeleportSkill(
-                enabled = true,
+                selected = true,
                 armed = false,
                 charges = 3,
                 cooldown = 20

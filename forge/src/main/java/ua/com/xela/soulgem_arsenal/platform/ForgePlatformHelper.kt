@@ -1,6 +1,8 @@
 package ua.com.xela.soulgem_arsenal.platform
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
+import net.minecraft.client.KeyMapping
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -31,8 +33,8 @@ class ForgePlatformHelper : IPlatformHelper {
         }
     }
 
-    override val platformName: String
-        get() = "Forge"
+    override val platformName: Platform
+        get() = Platform.Forge
 
     override fun isModLoaded(modId: String?): Boolean {
         return ModList.get().isLoaded(modId)
@@ -63,5 +65,22 @@ class ForgePlatformHelper : IPlatformHelper {
                 return regObj.get()
             }
         }
+    }
+
+    override fun registerKeyBinds(
+        category: String,
+        inputType: InputConstants.Type,
+        key: Int,
+        localizeName: String
+    ): KeyMapping {
+
+        val bind = KeyMapping(
+            localizeName,
+            inputType,
+            key,
+            category
+        )
+
+        return bind
     }
 }

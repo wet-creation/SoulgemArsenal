@@ -3,6 +3,7 @@ package ua.com.xela.soulgem_arsenal.skills
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.world.item.ItemStack
+import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
@@ -37,6 +38,8 @@ fun ItemStack.setSkillDynamic(clazz: KClass<out Skill>, newState: Skill) {
 
     @Suppress("UNCHECKED_CAST")
     this.set(componentAny, newState as Any)
+    Constants.LOG.info("new skill state {}", {newState})
+
 }
 
 
@@ -48,7 +51,7 @@ fun ItemStack.hasTeleportSkill(): Boolean {
 
 fun ItemStack.armTeleportSkill(): Boolean {
     val data = getSkill<TeleportSkill>() ?: return false
-    if (!data.enabled || data.charges <= 0) return false
+    if (!data.selected || data.charges <= 0) return false
 
     val updated = data.copy(armed = true)
     this.set(SkillComponents.Teleport.get(), updated)

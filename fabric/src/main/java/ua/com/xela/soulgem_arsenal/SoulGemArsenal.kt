@@ -1,33 +1,26 @@
 package ua.com.xela.soulgem_arsenal
 
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.event.player.UseItemCallback
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionResultHolder
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import ua.com.xela.soulgem_arsenal.core.Common
-import ua.com.xela.soulgem_arsenal.skills.base.SkillEvents
+import ua.com.xela.soulgem_arsenal.network.packets.SkillActivationPayload
+import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 
 object SoulGemArsenal : ModInitializer {
 
     override fun onInitialize() {
         Common.init()
 
-        UseItemCallback.EVENT.register(UseItemCallback { player, world, hand ->
-            val stack = player.mainHandItem ?: player.offhandItem
-
-            if (world.isClientSide || player !is ServerPlayer) {
-                return@UseItemCallback InteractionResultHolder.pass(stack)
+        ClientTickEvents.END_CLIENT_TICK.register { _ ->
+            if (KeyBinds.ActivateSkill.consumeClick()) {
+                SoulgemNetworkingFabric.sendSkillActivate()
             }
+        }
 
-            SkillEvents.onSkillActivate(
-                player,
-                stack = stack,
-                hand = hand,
-                isSneaking = player.isCrouching,
-            )
 
-            return@UseItemCallback InteractionResultHolder.pass(stack)
-            
-        })
+
+        SoulgemNetworkingFabric.registerReceivers()
+
     }
 }

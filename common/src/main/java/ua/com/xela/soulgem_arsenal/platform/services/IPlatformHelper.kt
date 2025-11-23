@@ -1,23 +1,22 @@
 package ua.com.xela.soulgem_arsenal.platform.services
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
+import net.minecraft.client.KeyMapping
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.Item
+import org.lwjgl.glfw.GLFW
+import ua.com.xela.soulgem_arsenal.platform.Platform
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 interface IPlatformHelper {
-    val platformName: String
+    val platformName: Platform
 
     val isDevelopmentEnvironment: Boolean
 
     val environmentName: String
-        /**
-         * Gets the name of the environment type as a string.
-         *
-         * @return The name of the environment type.
-         */
         get() = if (this.isDevelopmentEnvironment) "development" else "production"
 
 
@@ -30,4 +29,13 @@ interface IPlatformHelper {
         codec: Codec<T>,
         streamCodec: StreamCodec<RegistryFriendlyByteBuf, T>
     ): ComponentRef<T>
+
+    fun registerKeyBinds(
+        category: String,
+        inputType: InputConstants.Type,
+        key: Int,
+        localizeName: String
+
+    ): KeyMapping
 }
+

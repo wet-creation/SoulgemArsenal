@@ -1,7 +1,10 @@
 package ua.com.xela.soulgem_arsenal.platform
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.KeyMapping
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
@@ -19,8 +22,8 @@ import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 class FabricPlatformHelper : IPlatformHelper {
 
-    override val platformName: String
-        get() = "Fabric"
+    override val platformName: Platform
+        get() = Platform.Fabric
 
     override fun isModLoaded(modId: String?): Boolean {
         return FabricLoader.getInstance().isModLoaded(modId)
@@ -59,6 +62,23 @@ class FabricPlatformHelper : IPlatformHelper {
             }
 
         }
+    }
+
+    override fun registerKeyBinds(
+        category: String,
+        inputType: InputConstants.Type,
+        key: Int,
+        localizeName: String
+    ): KeyMapping {
+        val bind = KeyMapping(
+            localizeName,
+            inputType,
+            key,
+            category
+        )
+        KeyBindingHelper.registerKeyBinding(bind)
+
+        return bind
     }
 }
 
