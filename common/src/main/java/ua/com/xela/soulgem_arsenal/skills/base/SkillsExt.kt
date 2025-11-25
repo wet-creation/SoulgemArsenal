@@ -39,4 +39,3 @@ fun ItemStack.setSkillDynamic(clazz: KClass<out Skill>, newState: Skill) {
 }
 
 
-

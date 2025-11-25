@@ -15,7 +15,8 @@ import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import ua.com.xela.soulgem_arsenal.core.Constants
-import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
+import ua.com.xela.soulgem_arsenal.platform.api.Platform
+import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 

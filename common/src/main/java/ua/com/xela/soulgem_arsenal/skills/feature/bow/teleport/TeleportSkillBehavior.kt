@@ -5,7 +5,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.ItemStack
 import ua.com.xela.soulgem_arsenal.mixin.api.ModifiedPlayer
-import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.ActivationContext
 import ua.com.xela.soulgem_arsenal.skills.base.ArrowBlockHitContext
@@ -14,6 +13,7 @@ import ua.com.xela.soulgem_arsenal.skills.base.BowShotContext
 import ua.com.xela.soulgem_arsenal.skills.api.SkillBehavior
 import ua.com.xela.soulgem_arsenal.skills.base.getSkill
 import ua.com.xela.soulgem_arsenal.skills.base.setSkill
+import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import kotlin.reflect.KClass
 
 object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {

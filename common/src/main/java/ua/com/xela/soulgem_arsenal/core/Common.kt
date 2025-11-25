@@ -1,11 +1,10 @@
 package ua.com.xela.soulgem_arsenal.core
 
 import net.minecraft.resources.ResourceLocation
-import ua.com.xela.soulgem_arsenal.platform.Services
-import ua.com.xela.soulgem_arsenal.registry.KeyBinds
+import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.registry.ModItems
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
-import ua.com.xela.soulgem_arsenal.skills.base.SkillBehaviorRegistry
+import ua.com.xela.soulgem_arsenal.skills.system.SkillBehaviorRegistry
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillBehavior
 
 
@@ -16,7 +15,6 @@ object Common {
         ModItems.register()
         SkillComponents.register()
         registerSkillBehaviors()
-        KeyBinds.registry()
 
         Services.NETWORK.registerReceivers()
 

@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "ua.com.xela.soulgem_arsenal.mixin.impl",
+  "package": "ua.com.xela.soulgem_arsenal.mixin.injects",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "mixins": [],

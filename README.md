@@ -19,7 +19,7 @@
 
 ## Core Systems (Common)
 - Init entry: `common/src/main/java/ua/com/xela/soulgem_arsenal/Common.kt` registers items, data components, and skill behaviors.
-- Platform abstraction: `IPlatformHelper` (`common/.../platform/services/IPlatformHelper.kt`) implemented per loader and loaded via `META-INF/services`.
+- Platform abstraction: `IPlatformHelper` (`common/.../platform/api/services/IPlatformHelper.kt`) implemented per loader and loaded via `META-INF/services`.
 - Data components: registered in `SkillComponents` (`common/.../registries/SkillComponents.kt`) and keyed by `KClass` for each skill.
 - Skill behaviors: `SkillBehaviorRegistry` and `SkillEvents` (`common/.../skills/base/`) route bow/arrow events to behaviors.
 - Player mixin storage: `ServerPlayerModifiedMixin` implements `ModifiedPlayer` to track transient flags per skill.
@@ -38,11 +38,11 @@ Paths reference `common/src/main/java/ua/com/xela/soulgem_arsenal`.
 
 ## Loader-Specific Behavior
 - Fabric
-  - Entrypoint `fabric/src/main/java/ua/com/xela/soulgem_arsenal/SoulGemArsenal.kt`.
+  - Entrypoint `fabric/src/main/java/ua/com/xela/soulgem_arsenal/FabricMod.kt`.
   - `UseItemCallback` (shift + bow) installs teleport skill with 3 charges or arms next shot; sends chat feedback.
   - Platform helper implementation `fabric/.../platform/FabricPlatformHelper.kt`; service file in `fabric/src/main/resources/META-INF/services/...IPlatformHelper`.
 - Forge
-  - Entrypoint `forge/src/main/java/ua/com/xela/soulgem_arsenal/SoulgemArsenal.kt`; registers DeferredRegisters via `ForgePlatformHelper.register`.
+  - Entrypoint `forge/src/main/java/ua/com/xela/soulgem_arsenal/ForgeMod.kt`; registers DeferredRegisters via `ForgePlatformHelper.register`.
   - Interaction handler `forge/.../interations/ForgeInteractionEvents.kt` listens for shift + bow right-click to install/arm teleport skill; uses chat messages.
   - Platform helper implementation `forge/.../platform/ForgePlatformHelper.kt`; service file in `forge/src/main/resources/META-INF/services/...IPlatformHelper`.
 

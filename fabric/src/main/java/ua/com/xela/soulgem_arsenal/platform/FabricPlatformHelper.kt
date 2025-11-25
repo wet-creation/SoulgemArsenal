@@ -14,7 +14,8 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.Item
 import ua.com.xela.soulgem_arsenal.core.Common
-import ua.com.xela.soulgem_arsenal.platform.services.IPlatformHelper
+import ua.com.xela.soulgem_arsenal.platform.api.Platform
+import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
@@ -80,4 +81,3 @@ class FabricPlatformHelper : IPlatformHelper {
         return bind
     }
 }
-

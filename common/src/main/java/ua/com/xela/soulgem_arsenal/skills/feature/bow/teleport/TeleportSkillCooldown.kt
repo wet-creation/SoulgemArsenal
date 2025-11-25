@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import ua.com.xela.soulgem_arsenal.skills.base.ItemRef
-import ua.com.xela.soulgem_arsenal.skills.base.SkillCooldownManager
+import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
 import ua.com.xela.soulgem_arsenal.skills.base.getSkill
 import ua.com.xela.soulgem_arsenal.skills.base.setSkill
 

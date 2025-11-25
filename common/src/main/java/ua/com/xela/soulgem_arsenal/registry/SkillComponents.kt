@@ -1,7 +1,7 @@
 package ua.com.xela.soulgem_arsenal.registry
 
 import net.minecraft.core.component.DataComponentType
-import ua.com.xela.soulgem_arsenal.platform.Services
+import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import kotlin.reflect.KClass
@@ -35,4 +35,3 @@ object SkillComponents {
 
     }
 }
-

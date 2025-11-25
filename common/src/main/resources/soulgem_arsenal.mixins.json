@@ -1,19 +1,19 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "ua.com.xela.soulgem_arsenal.mixin.impl",
+  "package": "ua.com.xela.soulgem_arsenal.mixin.injects",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "mixins": [
-    "MixinServerMinecraft",
-    "ServerPlayerModifiedMixin",
-    "SmithingMenuMixin",
-    "accessors.SmithingMenuAccessor",
-    "bow.AbstractArrowMixin",
-    "bow.BowItemMixin"
+    "server.MixinServerMinecraft",
+    "server.ServerPlayerModifiedMixin",
+    "menu.SmithingMenuMixin",
+    "accessor.SmithingMenuAccessor",
+    "gameplay.bow.AbstractArrowMixin",
+    "gameplay.bow.BowItemMixin"
   ],
   "client": [
-    "MixinMinecraft"
+    "client.MixinMinecraft"
   ],
   "server": [],
   "injectors": {

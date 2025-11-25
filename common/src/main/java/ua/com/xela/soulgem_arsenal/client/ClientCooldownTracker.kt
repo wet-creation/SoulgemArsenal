@@ -1,11 +1,11 @@
 package ua.com.xela.soulgem_arsenal.client
 
 import ua.com.xela.soulgem_arsenal.core.Constants
-import ua.com.xela.soulgem_arsenal.network.payloads.CooldownCanceledPayload
-import ua.com.xela.soulgem_arsenal.network.payloads.CooldownChargeRestoredPayload
-import ua.com.xela.soulgem_arsenal.network.payloads.CooldownFinishedPayload
-import ua.com.xela.soulgem_arsenal.network.payloads.CooldownStartPayload
-import ua.com.xela.soulgem_arsenal.network.payloads.CooldownTickPayload
+import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownCanceledPayload
+import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownChargeRestoredPayload
+import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownFinishedPayload
+import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownStartPayload
+import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownTickPayload
 import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
 
 object ClientCooldownTracker {
