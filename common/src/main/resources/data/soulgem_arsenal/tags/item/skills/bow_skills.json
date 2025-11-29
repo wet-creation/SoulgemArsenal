@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "soulgem_arsenal:teleport_gem"
+    "soulgem_arsenal:teleport_gem",
+    "soulgem_arsenal:arrows_hail_gem"
   ]
 }

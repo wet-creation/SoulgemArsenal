@@ -20,13 +20,15 @@ data class BowShotContext(
 data class ArrowBlockHitContext(
     val level: ServerLevel,
     val arrow: AbstractArrow,
-    val shooter: ServerPlayer
+    val shooter: ServerPlayer,
+    val pickUpItemStack: ItemStack
 ) : SkillEventContext
 
 data class ArrowEntityHitContext(
     val level: ServerLevel,
     val arrow: AbstractArrow,
     val shooter: ServerPlayer,
+    val pickUpItemStack: ItemStack,
     val hitResult: EntityHitResult
 ) : SkillEventContext
 

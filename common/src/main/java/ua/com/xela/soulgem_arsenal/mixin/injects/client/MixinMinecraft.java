@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ua.com.xela.soulgem_arsenal.core.MinecraftScope;
-import ua.com.xela.soulgem_arsenal.core.MinecraftServerScope;
+import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftScope;
+import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftServerScope;
 
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
@@ -24,6 +24,8 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void soulgem$onClientInit(CallbackInfo ci) {
+
+        MinecraftScope.INSTANCE.attachDispatcher((Minecraft) (Object) this);
         MinecraftScope.INSTANCE.resume();
     }
 

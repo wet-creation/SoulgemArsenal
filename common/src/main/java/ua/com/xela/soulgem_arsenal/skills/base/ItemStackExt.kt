@@ -2,8 +2,10 @@ package ua.com.xela.soulgem_arsenal.skills.base
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.world.item.ItemStack
+import ua.com.xela.soulgem_arsenal.registry.ItemIdComponents
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import java.util.UUID
 import kotlin.reflect.KClass
 
 inline fun <reified T : Skill> ItemStack.getSkill(): T? =
@@ -37,5 +39,15 @@ fun ItemStack.setSkillDynamic(clazz: KClass<out Skill>, newState: Skill) {
     this.set(componentAny, newState as Any)
 
 }
+
+fun ItemStack.getOrCreateInstanceId(): ItemInstanceId {
+    val existing = this.get(ItemIdComponents.ITEM_ID.get())
+    if (existing != null) return existing
+
+    val newId = ItemInstanceId(UUID.randomUUID())
+    this.set(ItemIdComponents.ITEM_ID.get(), newId)
+    return newId
+}
+
 
 

@@ -18,7 +18,6 @@ import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.api.Platform
 import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
-import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
 
 class ForgePlatformHelper : IPlatformHelper {
@@ -49,7 +48,7 @@ class ForgePlatformHelper : IPlatformHelper {
         items.register(id, item)
     }
 
-    override fun <T : Skill> registerDataComponent(
+    override fun <T> registerDataComponent(
         id: String,
         codec: Codec<T>,
         streamCodec: StreamCodec<RegistryFriendlyByteBuf, T>

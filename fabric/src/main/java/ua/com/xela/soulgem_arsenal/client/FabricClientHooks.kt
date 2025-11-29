@@ -1,8 +1,8 @@
 package ua.com.xela.soulgem_arsenal.client
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import ua.com.xela.soulgem_arsenal.client.input.KeyBinds
 import ua.com.xela.soulgem_arsenal.platform.api.Services
+import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 
 object FabricClientHooks {
     fun init() {

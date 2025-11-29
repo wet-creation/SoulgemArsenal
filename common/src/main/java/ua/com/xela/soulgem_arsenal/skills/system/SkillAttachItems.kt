@@ -6,6 +6,7 @@ import ua.com.xela.soulgem_arsenal.registry.ModItems
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.SkillEntry
 import ua.com.xela.soulgem_arsenal.skills.base.setSkill
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 
 object SkillAttachItems {
@@ -20,7 +21,19 @@ object SkillAttachItems {
                 cooldown = 0,
                 maxCooldown = 20
             )
-        }
+        },
+        ModItems.ArrowsHailGem to SkillEntry(
+            ArrowsHailSkill::class
+        ) {
+            ArrowsHailSkill(
+                selected = true,
+                armed = false,
+                charges = 1,
+                cooldown = 0,
+                maxCooldown = 20
+            )
+        },
+
     )
 
     fun onSmithingResult(addition: ItemStack, result: ItemStack) {

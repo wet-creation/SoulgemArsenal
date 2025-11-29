@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ua.com.xela.soulgem_arsenal.core.Constants;
-import ua.com.xela.soulgem_arsenal.core.MinecraftServerScope;
+import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftServerScope;
 
 @Mixin(MinecraftServer.class)
 public abstract class MixinServerMinecraft {
@@ -15,6 +15,7 @@ public abstract class MixinServerMinecraft {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void soulgem$onServerInit(CallbackInfo ci) {
         Constants.LOG.info("server started, starting server coroutine scope");
+        MinecraftServerScope.INSTANCE.attachDispatcher((MinecraftServer) (Object) this);
         MinecraftServerScope.INSTANCE.start();
     }
 

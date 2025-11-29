@@ -3,16 +3,20 @@ package ua.com.xela.soulgem_arsenal.registry
 import net.minecraft.core.component.DataComponentType
 import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import kotlin.reflect.KClass
 
-interface ComponentRef<T : Skill> {
+interface ComponentRef<T> {
     fun get(): DataComponentType<T>
 }
 
 object SkillComponents {
 
     lateinit var Teleport: ComponentRef<TeleportSkill>
+        private set
+
+    lateinit var ArrowsHail: ComponentRef<ArrowsHailSkill>
         private set
 
 
@@ -28,9 +32,15 @@ object SkillComponents {
             TeleportSkill.CODEC,
             TeleportSkill.STREAM_CODEC
         )
+        ArrowsHail = Services.PLATFORM.registerDataComponent(
+            "arrows_hail_skill_teleport",
+            ArrowsHailSkill.CODEC,
+            ArrowsHailSkill.STREAM_CODEC
+        )
 
         skills = buildMap {
             put(TeleportSkill::class, Teleport)
+            put(ArrowsHailSkill::class, ArrowsHail)
         }
 
     }

@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import ua.com.xela.soulgem_arsenal.client.FabricClientHooks
 import ua.com.xela.soulgem_arsenal.core.Common
+import ua.com.xela.soulgem_arsenal.server.FabricServerHooks
 
 object FabricMod : ModInitializer {
 
@@ -14,5 +15,7 @@ object FabricMod : ModInitializer {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             FabricClientHooks.init()
         }
+
+        FabricServerHooks.init()
     }
 }

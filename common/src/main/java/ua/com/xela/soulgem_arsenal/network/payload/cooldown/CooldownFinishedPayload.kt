@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.network.cooldown
+package ua.com.xela.soulgem_arsenal.network.payload.cooldown
 
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
@@ -6,23 +6,25 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import ua.com.xela.soulgem_arsenal.core.Common
+import ua.com.xela.soulgem_arsenal.skills.base.ItemInstanceId
 import ua.com.xela.soulgem_arsenal.skills.base.NetworkCooldownKey
 
 
-data class CooldownCanceledPayload(
+data class CooldownFinishedPayload(
     val key: NetworkCooldownKey
 ): CustomPacketPayload {
 
     companion object {
-        val ID: ResourceLocation = Common.createResourceLocation("cooldown_canceled")
+        val ID: ResourceLocation = Common.createResourceLocation("cooldown_finished")
 
-        val TYPE: CustomPacketPayload.Type<CooldownCanceledPayload> =
+        val TYPE: CustomPacketPayload.Type<CooldownFinishedPayload> =
             CustomPacketPayload.Type(ID)
 
-        val CODEC: StreamCodec<FriendlyByteBuf, CooldownCanceledPayload> =
+        val CODEC: StreamCodec<FriendlyByteBuf, CooldownFinishedPayload> =
             StreamCodec.of(
                 { buf, payload ->
                     buf.writeUUID(payload.key.playerId)
+                    buf.writeUUID(payload.key.itemId.value)
                     buf.writeEnum(payload.key.hand)
                     buf.writeResourceLocation(payload.key.skillId)
 
@@ -33,6 +35,7 @@ data class CooldownCanceledPayload(
                 },
                 { buf ->
                     val playerId = buf.readUUID()
+                    val itemId = ItemInstanceId(buf.readUUID())
                     val hand = buf.readEnum(InteractionHand::class.java)
                     val skillId = buf.readResourceLocation()
 
@@ -41,11 +44,12 @@ data class CooldownCanceledPayload(
                         it.readVarInt()
                     }
 
-                    CooldownCanceledPayload(
+                    CooldownFinishedPayload(
                         key = NetworkCooldownKey(
                             playerId = playerId,
                             hand = hand,
                             skillId = skillId,
+                            itemId = itemId,
                             slotIndex = slotIndex
                         ),
                     )

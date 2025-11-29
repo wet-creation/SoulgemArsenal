@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.network.cooldown
+package ua.com.xela.soulgem_arsenal.network.payload.cooldown
 
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import ua.com.xela.soulgem_arsenal.core.Common
+import ua.com.xela.soulgem_arsenal.skills.base.ItemInstanceId
 import ua.com.xela.soulgem_arsenal.skills.base.NetworkCooldownKey
 
 data class CooldownChargeRestoredPayload(
@@ -23,6 +24,7 @@ data class CooldownChargeRestoredPayload(
             StreamCodec.of(
                 { buf, payload ->
                     buf.writeUUID(payload.key.playerId)
+                    buf.writeUUID(payload.key.itemId.value)
                     buf.writeEnum(payload.key.hand)
                     buf.writeResourceLocation(payload.key.skillId)
 
@@ -34,6 +36,7 @@ data class CooldownChargeRestoredPayload(
                 },
                 { buf ->
                     val playerId = buf.readUUID()
+                    val itemId = ItemInstanceId(buf.readUUID())
                     val hand = buf.readEnum(InteractionHand::class.java)
                     val skillId = buf.readResourceLocation()
 
@@ -49,6 +52,7 @@ data class CooldownChargeRestoredPayload(
                             playerId = playerId,
                             hand = hand,
                             skillId = skillId,
+                            itemId = itemId,
                             slotIndex = slotIndex
                         ),
                         chargeIndex = chargeIndex

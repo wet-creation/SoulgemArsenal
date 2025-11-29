@@ -6,7 +6,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 
-data class ArrowsHail(
+data class ArrowsHailSkill(
     override val selected: Boolean,
     override val armed: Boolean,
     override val cooldown: Int,
@@ -14,17 +14,19 @@ data class ArrowsHail(
     override val maxCooldown: Int
 ) : Skill {
     companion object {
-        val CODEC: Codec<ArrowsHail> = RecordCodecBuilder.create { inst ->
+        val KEY = Skill.createKey(ArrowsHailSkill::class)
+
+        val CODEC: Codec<ArrowsHailSkill> = RecordCodecBuilder.create { inst ->
             inst.group(
-                Codec.BOOL.fieldOf("selected").forGetter(ArrowsHail::selected),
-                Codec.BOOL.fieldOf("armed").forGetter(ArrowsHail::armed),
-                Codec.INT.fieldOf("charges").forGetter(ArrowsHail::charges),
-                Codec.INT.fieldOf("cooldown").forGetter(ArrowsHail::cooldown),
-                Codec.INT.fieldOf("maxCooldown").forGetter(ArrowsHail::maxCooldown),
-            ).apply(inst, ::ArrowsHail)
+                Codec.BOOL.fieldOf("selected").forGetter(ArrowsHailSkill::selected),
+                Codec.BOOL.fieldOf("armed").forGetter(ArrowsHailSkill::armed),
+                Codec.INT.fieldOf("charges").forGetter(ArrowsHailSkill::charges),
+                Codec.INT.fieldOf("cooldown").forGetter(ArrowsHailSkill::cooldown),
+                Codec.INT.fieldOf("maxCooldown").forGetter(ArrowsHailSkill::maxCooldown),
+            ).apply(inst, ::ArrowsHailSkill)
         }
 
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ArrowsHail> =
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ArrowsHailSkill> =
             StreamCodec.of(
                 { buf, value ->
                     buf.writeBoolean(value.selected)
@@ -39,7 +41,7 @@ data class ArrowsHail(
                     val charges = buf.readVarInt()
                     val cooldown = buf.readVarInt()
                     val maxCooldown = buf.readVarInt()
-                    ArrowsHail(enabled, armed, charges, cooldown, maxCooldown)
+                    ArrowsHailSkill(enabled, armed, charges, cooldown, maxCooldown)
                 }
             )
     }

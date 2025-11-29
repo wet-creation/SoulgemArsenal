@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import ua.com.xela.soulgem_arsenal.skills.base.ArrowBlockHitContext;
+import ua.com.xela.soulgem_arsenal.skills.base.ArrowEntityHitContext;
 import ua.com.xela.soulgem_arsenal.skills.system.SkillEvents;
 
 @Mixin(AbstractArrow.class)
@@ -19,8 +21,10 @@ public abstract class AbstractArrowMixin {
         AbstractArrow self = (AbstractArrow) (Object) this;
         var level = self.level();
         var owner = self.getOwner();
+        var itemStack = self.getPickupItemStackOrigin();
         if (!level.isClientSide() && owner instanceof ServerPlayer shooter) {
-            SkillEvents.INSTANCE.onArrowBlockHit((ServerLevel) level, self, shooter);
+            SkillEvents.INSTANCE
+                    .onArrowBlockHit(new ArrowBlockHitContext((ServerLevel) level, self, shooter, itemStack));
         }
     }
 
@@ -29,8 +33,10 @@ public abstract class AbstractArrowMixin {
         AbstractArrow self = (AbstractArrow) (Object) this;
         var level = self.level();
         var owner = self.getOwner();
+        var itemStack = self.getPickupItemStackOrigin();
         if (!level.isClientSide() && owner instanceof ServerPlayer shooter) {
-            SkillEvents.INSTANCE.onArrowEntityHit((ServerLevel) level, self, shooter, pResult);
+            SkillEvents.INSTANCE
+                    .onArrowEntityHit(new ArrowEntityHitContext((ServerLevel) level, self, shooter, itemStack, pResult));
         }
     }
 

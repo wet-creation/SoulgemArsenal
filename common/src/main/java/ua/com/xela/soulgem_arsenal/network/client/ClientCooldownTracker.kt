@@ -1,11 +1,11 @@
-package ua.com.xela.soulgem_arsenal.client
+package ua.com.xela.soulgem_arsenal.network.client
 
 import ua.com.xela.soulgem_arsenal.core.Constants
-import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownCanceledPayload
-import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownChargeRestoredPayload
-import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownFinishedPayload
-import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownStartPayload
-import ua.com.xela.soulgem_arsenal.network.cooldown.CooldownTickPayload
+import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
+import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload
+import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownFinishedPayload
+import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownStartPayload
+import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownTickPayload
 import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
 
 object ClientCooldownTracker {
@@ -32,7 +32,7 @@ object ClientCooldownTracker {
         val key = payload.key.toCooldownKey()
         val current = states[key] ?: return
         states[key] = current.copy(remainingSeconds = payload.remainingSeconds)
-        Constants.LOG.info("time % left ${getProgress(key) * 100}")
+        Constants.LOG.info("time % for ${key.skill.id.path} left ${getProgress(key) * 100}")
 
     }
 

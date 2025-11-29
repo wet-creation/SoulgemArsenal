@@ -20,6 +20,7 @@ interface Skill {
     //count of charges
     val charges: Int
 
+
     companion object {
         fun <T : Any> createKey(clazz: KClass<T>): SkillKey {
             return SkillKey(

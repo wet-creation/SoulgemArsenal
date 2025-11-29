@@ -3,17 +3,11 @@ package ua.com.xela.soulgem_arsenal.skills.system
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.phys.EntityHitResult
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
-import ua.com.xela.soulgem_arsenal.skills.base.ActivationContext
-import ua.com.xela.soulgem_arsenal.skills.base.ArrowBlockHitContext
-import ua.com.xela.soulgem_arsenal.skills.base.ArrowEntityHitContext
-import ua.com.xela.soulgem_arsenal.skills.base.BowShotContext
-import ua.com.xela.soulgem_arsenal.skills.base.setSkillDynamic
+import ua.com.xela.soulgem_arsenal.skills.base.*
 import kotlin.reflect.KClass
 
 object SkillEvents {
@@ -33,26 +27,14 @@ object SkillEvents {
     /**
      * Вызывается из миксина AbstractArrow.onHitBlock.
      */
-    fun onArrowBlockHit(level: ServerLevel, arrow: AbstractArrow, shooter: ServerPlayer) {
-        SkillBehaviorRegistry.dispatchArrowBlockHitGlobal(
-            ArrowBlockHitContext(level, arrow, shooter)
-        )
+    fun onArrowBlockHit(context: ArrowBlockHitContext) {
+        SkillBehaviorRegistry.dispatchArrowBlockHitGlobal(context)
     }
 
     fun onArrowEntityHit(
-        level: ServerLevel,
-        arrow: AbstractArrow,
-        shooter: ServerPlayer,
-        entityHitResult: EntityHitResult
+        context: ArrowEntityHitContext
     ) {
-        SkillBehaviorRegistry.dispatchArrowEntityHitGlobal(
-            ArrowEntityHitContext(
-                level = level,
-                arrow = arrow,
-                hitResult = entityHitResult,
-                shooter = shooter
-            )
-        )
+        SkillBehaviorRegistry.dispatchArrowEntityHitGlobal(context)
     }
 
 
