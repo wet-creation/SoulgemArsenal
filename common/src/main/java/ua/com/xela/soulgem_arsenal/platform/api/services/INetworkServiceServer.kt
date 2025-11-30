@@ -3,11 +3,8 @@ package ua.com.xela.soulgem_arsenal.platform.api.services
 import net.minecraft.server.level.ServerPlayer
 import ua.com.xela.soulgem_arsenal.skills.base.NetworkCooldownKey
 
-interface INetworkService {
+interface INetworkServiceServer {
 
-    fun registerReceivers()
-
-    fun sendActivateSkill()
     fun broadcastCooldownStart(player: ServerPlayer, key: NetworkCooldownKey, totalSeconds: Int, remainingSeconds: Int)
     fun broadcastCooldownTick(player: ServerPlayer, key: NetworkCooldownKey, totalSeconds: Int, remainingSeconds: Int)
     fun broadcastCooldownChargeRestored(player: ServerPlayer, key: NetworkCooldownKey, restoredChargeIndex: Int)

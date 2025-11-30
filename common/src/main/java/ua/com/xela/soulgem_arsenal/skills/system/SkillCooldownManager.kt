@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
+import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftServerScope
 import ua.com.xela.soulgem_arsenal.network.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.api.Services
@@ -122,8 +123,9 @@ object SkillCooldownManager {
                         endGameTime = secondsPerCharge.toGameTime(player.serverLevel())
                     )
                 )
+                Constants.LOG.info("COOLDOWN $remaining in $chargeIndex of $chargesToRestore")
 
-                Services.NETWORK.broadcastCooldownStart(
+                Services.NETWORK_SERVER.broadcastCooldownStart(
                     player = player,
                     key = key.toNetworkCooldownKey(),
                     totalSeconds = secondsPerCharge,
@@ -144,16 +146,18 @@ object SkillCooldownManager {
                             endGameTime = secondsPerCharge.toGameTime(player.serverLevel())
                         )
                     )
-                    Services.NETWORK.broadcastCooldownTick(
+                    Services.NETWORK_SERVER.broadcastCooldownTick(
                         player = player,
                         key = key.toNetworkCooldownKey(),
                         totalSeconds = secondsPerCharge,
                         remainingSeconds = remaining
                     )
+
+                    Constants.LOG.info("COOLDOWN $remaining in $chargeIndex of $chargesToRestore")
                 }
 
                 onChargeRestored(player, itemRef, itemId, skillKey, chargeIndex)
-                Services.NETWORK.broadcastCooldownChargeRestored(
+                Services.NETWORK_SERVER.broadcastCooldownChargeRestored(
                     player = player,
                     key = key.toNetworkCooldownKey(),
                     restoredChargeIndex = chargeIndex
@@ -164,7 +168,7 @@ object SkillCooldownManager {
                 key,
                 null
             )
-            Services.NETWORK.broadcastCooldownFinished(
+            Services.NETWORK_SERVER.broadcastCooldownFinished(
                 player = player,
                 key = key.toNetworkCooldownKey()
             )
@@ -183,7 +187,7 @@ object SkillCooldownManager {
             key,
             null
         )
-        Services.NETWORK.broadcastCooldownCanceled(player, key.toNetworkCooldownKey())
+        Services.NETWORK_SERVER.broadcastCooldownCanceled(player, key.toNetworkCooldownKey())
     }
 
     private fun updateStorage(

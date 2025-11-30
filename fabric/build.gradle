@@ -11,6 +11,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation "curse.maven:modmenu-308702:5810603"
+    modImplementation "curse.maven:carpet-349239:5425253" //test mod
     modImplementation "net.fabricmc:fabric-language-kotlin:${kotlin_fabric}"
 
 }

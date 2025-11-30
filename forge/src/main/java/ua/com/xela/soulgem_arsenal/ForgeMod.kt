@@ -17,9 +17,11 @@ import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.core.Constants
+import ua.com.xela.soulgem_arsenal.network.ForgeNetwork
 import ua.com.xela.soulgem_arsenal.network.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
 import ua.com.xela.soulgem_arsenal.platform.api.Services
+import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
 
@@ -32,7 +34,7 @@ object ForgeMod {
         Common.init()
 
         MOD_BUS.addListener(::onCommonSetup)
-
+        ForgeNetwork.registerReceivers()
         runForDist(
             clientTarget = {
                 MOD_BUS.addListener(::onClientSetup)
@@ -55,6 +57,7 @@ object ForgeMod {
         event.enqueueWork {
             MinecraftForge.EVENT_BUS.addListener(::onServerInit)
             MinecraftForge.EVENT_BUS.addListener(::onPlayerLogin)
+            MinecraftForge.EVENT_BUS.addListener(::onRegisterCommands)
         }
     }
 
@@ -63,6 +66,10 @@ object ForgeMod {
 
     }
 
+
+    fun onRegisterCommands(event: net.minecraftforge.event.RegisterCommandsEvent) {
+        CommandsRegister.register(event.dispatcher)
+    }
 
     private fun registerBindings(event: RegisterKeyMappingsEvent) {
         event.register(KeyBinds.ActivateSkill)
@@ -73,7 +80,7 @@ object ForgeMod {
             val mc = Minecraft.getInstance()
             if (mc.player == null) return
             if (KeyBinds.ActivateSkill.consumeClick()) {
-                Services.NETWORK.sendActivateSkill()
+                Services.NETWORK_CLIENT.sendActivateSkill()
             }
         }
     }

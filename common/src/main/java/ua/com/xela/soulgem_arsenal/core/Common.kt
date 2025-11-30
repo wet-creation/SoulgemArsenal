@@ -1,7 +1,6 @@
 package ua.com.xela.soulgem_arsenal.core
 
 import net.minecraft.resources.ResourceLocation
-import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.registry.ItemIdComponents
 import ua.com.xela.soulgem_arsenal.registry.ModItems
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
@@ -11,16 +10,13 @@ import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillBeha
 
 
 object Common {
-   private val keys: MutableMap<String, Int> = mutableMapOf()
+   private val keys: MutableSet<String> = mutableSetOf()
 
     fun init() {
         ModItems.register()
         SkillComponents.register()
         ItemIdComponents.register()
         registerSkillBehaviors()
-
-        Services.NETWORK.registerReceivers()
-
     }
 
     fun registerSkillBehaviors() {
@@ -29,10 +25,9 @@ object Common {
     }
 
     fun createResourceLocation(name: String): ResourceLocation {
-
-        val v = keys[name]
-        if (v != null) error("This resource $name is already existed")
-        keys[name] = 0
+        check(keys.add(name)) {
+            "Resource $name is already existed"
+        }
         return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name)
     }
 }

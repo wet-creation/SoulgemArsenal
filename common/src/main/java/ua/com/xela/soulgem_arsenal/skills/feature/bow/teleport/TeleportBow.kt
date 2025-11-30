@@ -17,7 +17,6 @@ data class TeleportSkill(
 
     val armedOrEnabled = selected || armed
     val armedAndEnabled = selected && armed
-    val canTeleport = charges > 0 || cooldown == 0
 
     companion object {
         val KEY = Skill.createKey(TeleportSkill::class)

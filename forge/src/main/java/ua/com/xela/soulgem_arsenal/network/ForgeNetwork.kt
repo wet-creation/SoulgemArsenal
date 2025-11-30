@@ -1,52 +1,39 @@
 package ua.com.xela.soulgem_arsenal.network
 
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.network.ChannelBuilder
-import net.minecraftforge.network.PacketDistributor
 import net.minecraftforge.network.SimpleChannel
-import ua.com.xela.soulgem_arsenal.network.client.ClientCooldownTracker
 import ua.com.xela.soulgem_arsenal.core.Common
+import ua.com.xela.soulgem_arsenal.network.client.ClientCooldownTracker
+import ua.com.xela.soulgem_arsenal.network.payload.activation.SkillActivationPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownFinishedPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownStartPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownTickPayload
-import ua.com.xela.soulgem_arsenal.network.payload.activation.SkillActivationPayload
-import ua.com.xela.soulgem_arsenal.platform.api.services.INetworkService
-import ua.com.xela.soulgem_arsenal.skills.base.NetworkCooldownKey
 import ua.com.xela.soulgem_arsenal.skills.system.SkillEvents
 
-class ForgeNetworkService : INetworkService {
+object ForgeNetwork {
+    var id = 0
+    const val PROTOCOL_VERSION = 1
+    val CHANNEL_NAME = Common.createResourceLocation("main")
 
-    companion object {
-        private const val PROTOCOL_VERSION = 1
+    val CHANNEL: SimpleChannel =
+        ChannelBuilder
+            .named(CHANNEL_NAME)
+            .networkProtocolVersion(PROTOCOL_VERSION)
+            .clientAcceptedVersions { _, protocol -> protocol == PROTOCOL_VERSION }
+            .serverAcceptedVersions { _, protocol -> protocol == PROTOCOL_VERSION }
+            .simpleChannel()
 
-        private val CHANNEL_NAME = Common.createResourceLocation("main")
 
-        private val CHANNEL: SimpleChannel =
-            ChannelBuilder
-                .named(CHANNEL_NAME)
-                .networkProtocolVersion(PROTOCOL_VERSION)
-                .clientAcceptedVersions { _, protocol -> protocol == PROTOCOL_VERSION }
-                .serverAcceptedVersions { _, protocol -> protocol == PROTOCOL_VERSION }
-                .simpleChannel()
-
-        private const val ID_SKILL_ACTIVATION = 0
-        private const val ID_COOLDOWN_START = 1
-        private const val ID_COOLDOWN_TICK = 2
-        private const val ID_COOLDOWN_CHARGE_RESTORED = 3
-        private const val ID_COOLDOWN_FINISHED = 4
-        private const val ID_COOLDOWN_CANCELED = 5
-    }
-
-    override fun registerReceivers() {
+    fun registerReceivers() {
         // C2S: активация скилла (клиент -> сервер)
         CHANNEL.messageBuilder(
             SkillActivationPayload::class.java,
-            ID_SKILL_ACTIVATION
+            id++
         )
             .codec(StreamCodec.unit(SkillActivationPayload))
             .consumerMainThread { _, ctx ->
@@ -58,7 +45,8 @@ class ForgeNetworkService : INetworkService {
         // S2C: старт кулдауна
         CHANNEL.messageBuilder(
             CooldownStartPayload::class.java,
-            ID_COOLDOWN_START
+            id++
+
         )
             .codec(CooldownStartPayload.CODEC)
             .consumerMainThread { msg, _ ->
@@ -73,7 +61,7 @@ class ForgeNetworkService : INetworkService {
         // S2C: тик кулдауна
         CHANNEL.messageBuilder(
             CooldownTickPayload::class.java,
-            ID_COOLDOWN_TICK
+            id++
         )
             .codec(CooldownTickPayload.CODEC)
             .consumerMainThread { msg, _ ->
@@ -88,7 +76,8 @@ class ForgeNetworkService : INetworkService {
         // S2C: один заряд восстановился
         CHANNEL.messageBuilder(
             CooldownChargeRestoredPayload::class.java,
-            ID_COOLDOWN_CHARGE_RESTORED
+            id++
+
         )
             .codec(CooldownChargeRestoredPayload.CODEC)
             .consumerMainThread { msg, _ ->
@@ -103,7 +92,7 @@ class ForgeNetworkService : INetworkService {
         // S2C: кулдаун полностью закончился
         CHANNEL.messageBuilder(
             CooldownFinishedPayload::class.java,
-            ID_COOLDOWN_FINISHED
+            id++
         )
             .codec(CooldownFinishedPayload.CODEC)
             .consumerMainThread { msg, _ ->
@@ -118,7 +107,7 @@ class ForgeNetworkService : INetworkService {
         // S2C: кулдаун отменён
         CHANNEL.messageBuilder(
             CooldownCanceledPayload::class.java,
-            ID_COOLDOWN_CANCELED
+            id++
         )
             .codec(CooldownCanceledPayload.CODEC)
             .consumerMainThread { msg, _ ->
@@ -129,85 +118,5 @@ class ForgeNetworkService : INetworkService {
                 }
             }
             .add()
-    }
-
-    // CLIENT -> SERVER
-    override fun sendActivateSkill() {
-        CHANNEL.send(
-            SkillActivationPayload,
-            PacketDistributor.SERVER.noArg()
-        )
-    }
-
-    // SERVER -> CLIENT
-
-    override fun broadcastCooldownStart(
-        player: ServerPlayer,
-        key: NetworkCooldownKey,
-        totalSeconds: Int,
-        remainingSeconds: Int
-    ) {
-        CHANNEL.send(
-            CooldownStartPayload(
-                key = key,
-                totalSeconds = totalSeconds,
-                remainingSeconds = remainingSeconds
-            ),
-            PacketDistributor.PLAYER.with(player)
-        )
-    }
-
-    override fun broadcastCooldownTick(
-        player: ServerPlayer,
-        key: NetworkCooldownKey,
-        totalSeconds: Int,
-        remainingSeconds: Int
-    ) {
-        CHANNEL.send(
-            CooldownTickPayload(
-                key = key,
-                totalSeconds = totalSeconds,
-                remainingSeconds = remainingSeconds
-            ),
-            PacketDistributor.PLAYER.with(player)
-        )
-    }
-
-    override fun broadcastCooldownChargeRestored(
-        player: ServerPlayer,
-        key: NetworkCooldownKey,
-        restoredChargeIndex: Int
-    ) {
-        CHANNEL.send(
-            CooldownChargeRestoredPayload(
-                key = key,
-                chargeIndex = restoredChargeIndex
-            ),
-            PacketDistributor.PLAYER.with(player)
-        )
-    }
-
-    override fun broadcastCooldownFinished(
-        player: ServerPlayer,
-        key: NetworkCooldownKey
-    ) {
-        CHANNEL.send(
-            CooldownFinishedPayload(
-                key = key
-            ),
-            PacketDistributor.PLAYER.with(player)
-        )
-    }
-
-    override fun broadcastCooldownCanceled(
-        player: ServerPlayer,
-        key: NetworkCooldownKey
-    ) {
-        CHANNEL.send(
-            CooldownCanceledPayload(
-                key = key
-            ),
-            PacketDistributor.PLAYER.with(player)
-        )
     }
 }

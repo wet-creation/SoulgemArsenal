@@ -14,6 +14,7 @@ import net.minecraftforge.fml.loading.FMLLoader
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
+import thedarkcolour.kotlinforforge.forge.DIST
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.api.Platform
 import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
@@ -33,6 +34,9 @@ class ForgePlatformHelper : IPlatformHelper {
             dataComponents.register(eventBus)
         }
     }
+
+    override val isClientEnv: Boolean
+        get() = DIST.isClient
 
     override val platformName: Platform
         get() = Platform.Forge

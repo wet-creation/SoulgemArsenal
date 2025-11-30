@@ -1,7 +1,8 @@
 package ua.com.xela.soulgem_arsenal.platform.api
 
 import ua.com.xela.soulgem_arsenal.core.Constants
-import ua.com.xela.soulgem_arsenal.platform.api.services.INetworkService
+import ua.com.xela.soulgem_arsenal.platform.api.services.INetworkServiceClient
+import ua.com.xela.soulgem_arsenal.platform.api.services.INetworkServiceServer
 import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import java.util.*
 
@@ -10,7 +11,8 @@ object Services {
     // For example this can be used to check if the code is running on Forge vs Fabric, or to ask the modloader if another
     // mod is loaded.
     val PLATFORM: IPlatformHelper = loadService<IPlatformHelper>()
-    val NETWORK: INetworkService = loadService<INetworkService>()
+    val NETWORK_SERVER: INetworkServiceServer = loadService<INetworkServiceServer>()
+    val NETWORK_CLIENT: INetworkServiceClient = loadService<INetworkServiceClient>()
 
     // This code is used to load a service for the current environment. Your implementation of the service must be defined
     // manually by including a text file in META-INF/services named with the fully qualified class name of the service.

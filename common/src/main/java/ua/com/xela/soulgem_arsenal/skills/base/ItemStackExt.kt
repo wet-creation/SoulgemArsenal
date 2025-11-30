@@ -11,6 +11,21 @@ import kotlin.reflect.KClass
 inline fun <reified T : Skill> ItemStack.getSkill(): T? =
     getSkill(T::class)
 
+// common
+fun ItemStack.getAllSkills(): List<Skill> {
+    val result = mutableListOf<Skill>()
+
+    SkillComponents.skills.values.forEach { value ->
+        val skill = get(value.get())
+        if (skill != null) {
+            result += skill
+        }
+    }
+
+    return result
+}
+
+
 fun <T : Skill> ItemStack.getSkill(klass: KClass<T>): T? {
     val ref = SkillComponents[klass] ?: return null
     @Suppress("UNCHECKED_CAST")
@@ -23,6 +38,7 @@ inline fun <reified T : Skill> ItemStack.setSkill(newState: T) {
 
 fun <T : Skill> ItemStack.setSkill(clazz: KClass<T>, newState: T) {
     val componentRef = SkillComponents[clazz] ?: return
+
     @Suppress("UNCHECKED_CAST")
     val component = componentRef.get() as? DataComponentType<T> ?: return
     this.set(component, newState)

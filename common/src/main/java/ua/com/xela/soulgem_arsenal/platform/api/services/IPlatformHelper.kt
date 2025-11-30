@@ -14,6 +14,8 @@ interface IPlatformHelper {
 
     val isDevelopmentEnvironment: Boolean
 
+    val isClientEnv: Boolean
+
     val environmentName: String
         get() = if (this.isDevelopmentEnvironment) "development" else "production"
 

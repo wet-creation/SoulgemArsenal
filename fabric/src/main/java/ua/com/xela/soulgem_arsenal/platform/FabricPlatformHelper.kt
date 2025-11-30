@@ -2,6 +2,7 @@ package ua.com.xela.soulgem_arsenal.platform
 
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
+import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.KeyMapping
@@ -24,12 +25,15 @@ class FabricPlatformHelper : IPlatformHelper {
     override val platformName: Platform
         get() = Platform.Fabric
 
+    override val isDevelopmentEnvironment: Boolean
+        get() = FabricLoader.getInstance().isDevelopmentEnvironment
+
+    override val isClientEnv: Boolean
+        get() = FabricLoader.getInstance().environmentType == EnvType.CLIENT
+
     override fun isModLoaded(modId: String?): Boolean {
         return FabricLoader.getInstance().isModLoaded(modId)
     }
-
-    override val isDevelopmentEnvironment: Boolean
-        get() = FabricLoader.getInstance().isDevelopmentEnvironment
 
     override fun registerItem(id: String, item: () -> Item) {
         val itemKey = ResourceKey.create(Registries.ITEM, Common.createResourceLocation(id))
