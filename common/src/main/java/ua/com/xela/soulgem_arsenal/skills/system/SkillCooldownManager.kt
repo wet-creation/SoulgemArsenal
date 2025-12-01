@@ -1,20 +1,13 @@
 package ua.com.xela.soulgem_arsenal.skills.system
 
 import kotlinx.coroutines.Job
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.item.ItemStack
-import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftServerScope
 import ua.com.xela.soulgem_arsenal.network.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.api.Services
-import ua.com.xela.soulgem_arsenal.registry.ItemIdComponents
-import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
-import ua.com.xela.soulgem_arsenal.skills.base.ItemInstanceId
-import ua.com.xela.soulgem_arsenal.skills.base.ItemRef
-import ua.com.xela.soulgem_arsenal.skills.base.SkillKey
+import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.base.*
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowHailSkillCooldown
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
@@ -24,21 +17,25 @@ import java.util.concurrent.ConcurrentHashMap
 object SkillCooldownManager {
     private val activeJobs = ConcurrentHashMap<CooldownKey, Job>()
 
-
     fun resumeForPlayer(level: ServerLevel, player: ServerPlayer) {
         val storage = CooldownStorage.get(level)
 
         val playerStates = storage.states
-            .filterKeys { it.playerId == player.uuid }
+            .filterValues { it.playerId == player.uuid }
 
         for ((key, stored) in playerStates) {
-            if ((stored.chargeToRestore - stored.currentChargeIndex) <= 0) {
-                storage.states.remove(key)
-                storage.setDirty()
-                continue
-            }
-
             resumeSingleCooldown(player, key, stored)
+        }
+    }
+
+    fun onPlayerDisconnect(level: ServerLevel, player: ServerPlayer) {
+        val storage = CooldownStorage.get(level)
+        val listOfInstanceId = player.getAllInstanceId()
+
+        val statesToCancel = storage.states.filterKeys { listOfInstanceId.contains(it.itemId) }
+
+        statesToCancel.keys.forEach { key ->
+            cancel(player, key)
         }
     }
 
@@ -50,68 +47,56 @@ object SkillCooldownManager {
     ) {
         startCooldown(
             player = player,
-            itemRef = key.item,
             skillKey = key.skill,
             itemId = key.itemId,
             chargesToRestore = stored.chargeToRestore - stored.currentChargeIndex,
             secondsPerCharge = stored.totalSecondsPerCharge,
-            onChargeRestored = { player, ref, id, key, i ->
-                val stack = findItemByInstanceId(player.server, itemId = id) ?: return@startCooldown
-                when (key) {
-                    TeleportSkill.KEY -> TeleportSkillCooldown.onCharge(stack)
-                    ArrowsHailSkill.KEY -> ArrowHailSkillCooldown.onCharge(stack)
-                    else -> error("$key WAS NOT mapped for cooldown restore")
-                }
+            onChargeRestored = { player, id, key, i ->
+                defaultChargeFlow(player, id, key)
             }
         )
     }
 
-    private fun findItemByInstanceId(server: MinecraftServer, itemId: ItemInstanceId): ItemStack? {
-        for (player in server.playerList.players) {
-            listOf(player.mainHandItem, player.offhandItem).forEach { stack ->
-                val id = stack.get(ItemIdComponents.ITEM_ID.get())
-                if (id == itemId) return stack
-            }
 
-            for (stack in player.inventory.items) {
-                val id = stack.get(ItemIdComponents.ITEM_ID.get())
-                if (id == itemId) return stack
-            }
+    fun defaultChargeFlow(
+        player: ServerPlayer,
+        id: ItemInstanceId,
+        key: SkillKey
+    ) {
+        when (key) {
+            TeleportSkill.KEY -> TeleportSkillCooldown.onCharge(player, id)
+            ArrowsHailSkill.KEY -> ArrowHailSkillCooldown.onCharge(player, id)
+            else -> error("$key WAS NOT mapped for cooldown restore")
         }
-
-        for (level in server.allLevels) {
-            for (entity in level.allEntities) {
-                if (entity is ItemEntity) {
-                    val stack = entity.item
-                    val id = stack.get(ItemIdComponents.ITEM_ID.get())
-                    if (id == itemId) return stack
-                }
-            }
-        }
-
-        return null
     }
 
+    inline fun <reified T : Skill> onCharge(
+        player: ServerPlayer,
+        id: ItemInstanceId,
+        updater: (T) -> T
+    ) {
+        val stack = ItemInstanceId.findStackById(player.server, id = id) ?: return
+        val current = stack.getSkill<T>() ?: return
+        stack.setSkill(updater(current))
+    }
 
     fun startCooldown(
         player: ServerPlayer,
-        itemRef: ItemRef,
         itemId: ItemInstanceId,
         skillKey: SkillKey,
         chargesToRestore: Int,
         secondsPerCharge: Int,
-        onChargeRestored: suspend (ServerPlayer, ItemRef, ItemInstanceId, SkillKey, Int) -> Unit
+        onChargeRestored: suspend (ServerPlayer, ItemInstanceId, SkillKey, Int) -> Unit
     ) {
         if (chargesToRestore <= 0 || secondsPerCharge <= 0) return
 
-        val key = CooldownKey(player.uuid, itemRef, itemId, skillKey)
-
+        val key = CooldownKey(itemId, skillKey)
+        val wholeTime = (secondsPerCharge * chargesToRestore).toGameTime(player.serverLevel())
         activeJobs.remove(key)?.cancel()
 
         val job = MinecraftServerScope.launchInScope {
             repeat(chargesToRestore) { chargeIndex ->
                 var remaining = secondsPerCharge
-
                 updateStorage(
                     player,
                     key,
@@ -120,10 +105,10 @@ object SkillCooldownManager {
                         remainingSeconds = remaining,
                         currentChargeIndex = chargeIndex,
                         chargeToRestore = chargesToRestore,
-                        endGameTime = secondsPerCharge.toGameTime(player.serverLevel())
+                        playerId = player.uuid,
+                        endGameTime = wholeTime
                     )
                 )
-                Constants.LOG.info("COOLDOWN $remaining in $chargeIndex of $chargesToRestore")
 
                 Services.NETWORK_SERVER.broadcastCooldownStart(
                     player = player,
@@ -143,7 +128,8 @@ object SkillCooldownManager {
                             remainingSeconds = remaining,
                             currentChargeIndex = chargeIndex,
                             chargeToRestore = chargesToRestore,
-                            endGameTime = secondsPerCharge.toGameTime(player.serverLevel())
+                            playerId = player.uuid,
+                            endGameTime = wholeTime
                         )
                     )
                     Services.NETWORK_SERVER.broadcastCooldownTick(
@@ -153,10 +139,9 @@ object SkillCooldownManager {
                         remainingSeconds = remaining
                     )
 
-                    Constants.LOG.info("COOLDOWN $remaining in $chargeIndex of $chargesToRestore")
                 }
 
-                onChargeRestored(player, itemRef, itemId, skillKey, chargeIndex)
+                onChargeRestored(player, itemId, skillKey, chargeIndex)
                 Services.NETWORK_SERVER.broadcastCooldownChargeRestored(
                     player = player,
                     key = key.toNetworkCooldownKey(),
@@ -179,14 +164,8 @@ object SkillCooldownManager {
         activeJobs[key] = job
     }
 
-    fun cancel(player: ServerPlayer, itemRef: ItemRef, itemId: ItemInstanceId, skillKey: SkillKey) {
-        val key = CooldownKey(player.uuid, itemRef, itemId, skillKey)
+    fun cancel(player: ServerPlayer, key: CooldownKey) {
         activeJobs.remove(key)?.cancel()
-        updateStorage(
-            player,
-            key,
-            null
-        )
         Services.NETWORK_SERVER.broadcastCooldownCanceled(player, key.toNetworkCooldownKey())
     }
 
@@ -207,11 +186,13 @@ object SkillCooldownManager {
         storage.setDirty()
     }
 
+    private fun Int.toGameTime(level: ServerLevel): Long {
+        val now: Long = level.gameTime
+
+        val cooldownTicks: Long = this.toLong() * 20L
+        return now + cooldownTicks
+
+    }
+
 }
 
-fun Int.toGameTime(level: ServerLevel): Long {
-    val now: Long = level.gameTime
-    val cooldownTicks: Long = this.toLong() * 20L
-    return now + cooldownTicks
-
-}

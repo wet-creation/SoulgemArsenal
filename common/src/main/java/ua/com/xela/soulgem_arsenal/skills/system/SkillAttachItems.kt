@@ -18,7 +18,7 @@ object SkillAttachItems {
                 selected = true,
                 armed = false,
                 charges = 3,
-                cooldown = 0,
+                maxCharges = 3,
                 maxCooldown = 20
             )
         },
@@ -29,7 +29,7 @@ object SkillAttachItems {
                 selected = true,
                 armed = false,
                 charges = 1,
-                cooldown = 0,
+                maxCharges = 1,
                 maxCooldown = 20
             )
         },

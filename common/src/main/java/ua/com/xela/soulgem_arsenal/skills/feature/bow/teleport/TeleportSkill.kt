@@ -11,7 +11,7 @@ data class TeleportSkill(
     override val selected: Boolean,
     override val armed: Boolean,
     override val charges: Int,
-    override val cooldown: Int,
+    override val maxCharges: Int,
     override val maxCooldown: Int
 ) : Skill {
 
@@ -26,7 +26,7 @@ data class TeleportSkill(
                 Codec.BOOL.fieldOf("selected").forGetter(TeleportSkill::selected),
                 Codec.BOOL.fieldOf("armed").forGetter(TeleportSkill::armed),
                 Codec.INT.fieldOf("charges").forGetter(TeleportSkill::charges),
-                Codec.INT.fieldOf("cooldown").forGetter(TeleportSkill::cooldown),
+                Codec.INT.fieldOf("maxCharges").forGetter(TeleportSkill::maxCharges),
                 Codec.INT.fieldOf("maxCooldown").forGetter(TeleportSkill::maxCooldown),
             ).apply(inst, ::TeleportSkill)
         }
@@ -37,16 +37,16 @@ data class TeleportSkill(
                     buf.writeBoolean(value.selected)
                     buf.writeBoolean(value.armed)
                     buf.writeVarInt(value.charges)
-                    buf.writeVarInt(value.cooldown)
+                    buf.writeVarInt(value.maxCharges)
                     buf.writeVarInt(value.maxCooldown)
                 },
                 { buf ->
                     val enabled = buf.readBoolean()
                     val armed = buf.readBoolean()
                     val charges = buf.readVarInt()
-                    val cooldown = buf.readVarInt()
+                    val maxCharges = buf.readVarInt()
                     val maxCooldown = buf.readVarInt()
-                    TeleportSkill(enabled, armed, charges, cooldown, maxCooldown)
+                    TeleportSkill(enabled, armed, charges, maxCharges, maxCooldown)
                 }
             )
     }

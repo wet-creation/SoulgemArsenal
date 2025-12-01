@@ -3,22 +3,21 @@ package ua.com.xela.soulgem_arsenal.network.server
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.datafix.DataFixTypes
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.level.saveddata.SavedData
 import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
 import ua.com.xela.soulgem_arsenal.skills.base.ItemInstanceId
-import ua.com.xela.soulgem_arsenal.skills.base.ItemRef
 import ua.com.xela.soulgem_arsenal.skills.base.SkillKey
+import java.util.UUID
 
 class CooldownStorage : SavedData() {
     data class CooldownState(
         val totalSecondsPerCharge: Int,
         val remainingSeconds: Int,
         val currentChargeIndex: Int,
+        val playerId: UUID,
         val chargeToRestore: Int,
         val endGameTime: Long
     )
@@ -31,15 +30,11 @@ class CooldownStorage : SavedData() {
         for ((key, state) in states) {
             val entry = CompoundTag()
 
-            entry.putUUID(PLAYER_ID, key.playerId)
             entry.putUUID(ITEM_ID, key.itemId.value)
 
             entry.putString(SKILL_ID_PATH, key.skill.id.toString())
-            entry.putString(HAND, key.item.hand.name)
-            key.item.slotIndex?.let {
-                entry.putInt(SLOT, key.item.slotIndex)
-            }
 
+            entry.putUUID(PLAYER_ID, state.playerId)
             entry.putLong(END_GAME_TIME, state.endGameTime)
             entry.putInt(TOTAL_SECONDS_PER_CHARGE, state.totalSecondsPerCharge)
             entry.putInt(REMAINING_SECONDS, state.remainingSeconds)
@@ -96,17 +91,10 @@ class CooldownStorage : SavedData() {
 
                 element as CompoundTag
 
-                val playerId = element.getUUID(PLAYER_ID)
                 val itemId = ItemInstanceId(element.getUUID(ITEM_ID))
                 val skillId = element.getString(SKILL_ID_PATH)
-                val handName = element.getString(HAND)
-                val slot =
-                    if (element.contains(SLOT, Tag.TAG_INT.toInt()))
-                        element.getInt(SLOT)
-                    else
-                        null
 
-
+                val playerId = element.getUUID(PLAYER_ID)
                 val endGameTime = element.getLong(END_GAME_TIME)
                 val totalSeconds = element.getInt(TOTAL_SECONDS_PER_CHARGE)
                 val remainingSeconds = element.getInt(REMAINING_SECONDS)
@@ -114,16 +102,12 @@ class CooldownStorage : SavedData() {
                 val index = element.getInt(CURRENT_CHARGE_INDEX)
 
                 val key = CooldownKey(
-                    playerId = playerId,
-                    item = ItemRef(
-                        hand = InteractionHand.valueOf(handName),
-                        slotIndex = slot
-                    ),
                     itemId = itemId,
                     skill = SkillKey(ResourceLocation.parse(skillId))
                 )
 
                 val state = CooldownState(
+                    playerId = playerId,
                     endGameTime = endGameTime,
                     totalSecondsPerCharge = totalSeconds,
                     chargeToRestore = chargeToRestore,

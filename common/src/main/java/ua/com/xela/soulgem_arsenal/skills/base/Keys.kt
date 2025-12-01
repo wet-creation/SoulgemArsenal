@@ -5,7 +5,10 @@ import net.minecraft.core.UUIDUtil
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.InteractionHand
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
 import java.util.*
 
 
@@ -27,6 +30,45 @@ value class ItemInstanceId(val value: UUID) {
                     ItemInstanceId(value)
                 }
             )
+
+
+        fun findStackById(
+            server: MinecraftServer,
+            id: ItemInstanceId
+        ): ItemStack? {
+            for (player in server.playerList.players) {
+                findInPlayer(player, id)?.let { return it }
+            }
+
+            for (level in server.allLevels) {
+                for (entity in level.allEntities) {
+                    if (entity is ItemEntity) {
+                        val stack = entity.item
+                        if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) {
+                            return stack
+                        }
+                    }
+                }
+            }
+
+            return null
+        }
+
+        private fun findInPlayer(player: ServerPlayer, id: ItemInstanceId): ItemStack? {
+            listOf(player.mainHandItem, player.offhandItem).forEach { stack ->
+                if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) return stack
+            }
+
+            val inv = player.inventory
+            for (slot in 0 until inv.containerSize) {
+                val stack = inv.getItem(slot)
+                if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) return stack
+            }
+
+            return null
+        }
+
+
     }
 }
 
@@ -36,39 +78,21 @@ data class SkillKey(
     val id: ResourceLocation
 )
 
-data class ItemRef(
-    val hand: InteractionHand,
-    val slotIndex: Int? = null
-)
-
 data class CooldownKey(
-    val playerId: UUID,
-    val item: ItemRef,
     val itemId: ItemInstanceId,
     val skill: SkillKey
 ) {
     fun toNetworkCooldownKey() = NetworkCooldownKey(
-        playerId = playerId,
-        hand = item.hand,
         skillId = skill.id,
         itemId = itemId,
-        slotIndex = item.slotIndex
     )
 }
 
 data class NetworkCooldownKey(
-    val playerId: UUID,
-    val hand: InteractionHand,
     val skillId: ResourceLocation,
     val itemId: ItemInstanceId,
-    val slotIndex: Int?
 ) {
     fun toCooldownKey() = CooldownKey(
-        playerId = playerId,
-        item = ItemRef(
-            hand = hand,
-            slotIndex = slotIndex
-        ),
         itemId = itemId,
         skill = SkillKey(skillId)
     )

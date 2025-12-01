@@ -12,7 +12,7 @@ interface Skill {
     val armed: Boolean
 
     //cooldown in seconds for next recharge
-    val cooldown: Int
+    val maxCharges: Int
 
     //cooldown in seconds for next recharge
     val maxCooldown: Int

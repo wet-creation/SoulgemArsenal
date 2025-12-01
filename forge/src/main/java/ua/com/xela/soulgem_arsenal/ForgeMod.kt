@@ -92,12 +92,23 @@ object ForgeMod {
         }
     }
 
-    private fun onPlayerLogin(event: PlayerEvent.PlayerLoggedInEvent) {
+    private fun onPlayerLogin(event: PlayerEvent) {
         val player = event.entity as? ServerPlayer ?: return
-        SkillCooldownManager.resumeForPlayer(
-            level = player.serverLevel(),
-            player = player
-        )
+        when (event) {
+            is PlayerEvent.PlayerLoggedInEvent -> {
+                SkillCooldownManager.resumeForPlayer(
+                    level = player.serverLevel(),
+                    player = player
+                )
+            }
+            is PlayerEvent.PlayerLoggedOutEvent -> {
+                SkillCooldownManager.onPlayerDisconnect(
+                    level = player.serverLevel(),
+                    player = player
+                )
+            }
+        }
+
 
     }
 

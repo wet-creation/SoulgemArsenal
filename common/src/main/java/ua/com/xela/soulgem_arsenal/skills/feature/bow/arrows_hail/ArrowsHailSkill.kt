@@ -9,7 +9,7 @@ import ua.com.xela.soulgem_arsenal.skills.api.Skill
 data class ArrowsHailSkill(
     override val selected: Boolean,
     override val armed: Boolean,
-    override val cooldown: Int,
+    override val maxCharges: Int,
     override val charges: Int,
     override val maxCooldown: Int
 ) : Skill {
@@ -21,7 +21,7 @@ data class ArrowsHailSkill(
                 Codec.BOOL.fieldOf("selected").forGetter(ArrowsHailSkill::selected),
                 Codec.BOOL.fieldOf("armed").forGetter(ArrowsHailSkill::armed),
                 Codec.INT.fieldOf("charges").forGetter(ArrowsHailSkill::charges),
-                Codec.INT.fieldOf("cooldown").forGetter(ArrowsHailSkill::cooldown),
+                Codec.INT.fieldOf("maxCharges").forGetter(ArrowsHailSkill::maxCharges),
                 Codec.INT.fieldOf("maxCooldown").forGetter(ArrowsHailSkill::maxCooldown),
             ).apply(inst, ::ArrowsHailSkill)
         }
@@ -32,16 +32,16 @@ data class ArrowsHailSkill(
                     buf.writeBoolean(value.selected)
                     buf.writeBoolean(value.armed)
                     buf.writeVarInt(value.charges)
-                    buf.writeVarInt(value.cooldown)
+                    buf.writeVarInt(value.maxCharges)
                     buf.writeVarInt(value.maxCooldown)
                 },
                 { buf ->
                     val enabled = buf.readBoolean()
                     val armed = buf.readBoolean()
                     val charges = buf.readVarInt()
-                    val cooldown = buf.readVarInt()
+                    val maxCharges = buf.readVarInt()
                     val maxCooldown = buf.readVarInt()
-                    ArrowsHailSkill(enabled, armed, charges, cooldown, maxCooldown)
+                    ArrowsHailSkill(enabled, armed, charges, maxCharges, maxCooldown)
                 }
             )
     }
