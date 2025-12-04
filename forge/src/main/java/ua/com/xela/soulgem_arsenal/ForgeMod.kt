@@ -3,6 +3,7 @@ package ua.com.xela.soulgem_arsenal
 import net.minecraft.client.Minecraft
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.TickEvent
@@ -18,13 +19,12 @@ import thedarkcolour.kotlinforforge.forge.runForDist
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.network.ForgeNetwork
-import ua.com.xela.soulgem_arsenal.network.server.CooldownStorage
+import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
 import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
-
 
 @Mod(Constants.MOD_ID)
 object ForgeMod {
@@ -38,7 +38,6 @@ object ForgeMod {
         runForDist(
             clientTarget = {
                 MOD_BUS.addListener(::onClientSetup)
-                MOD_BUS.addListener(::registerBindings)
                 Minecraft.getInstance()
             },
             serverTarget = {
@@ -48,32 +47,18 @@ object ForgeMod {
         )
     }
 
-
+    //client
     private fun onClientSetup(event: FMLClientSetupEvent) {
-        MinecraftForge.EVENT_BUS.addListener(::onClientTick)
-    }
-
-    private fun onCommonSetup(event: FMLCommonSetupEvent) {
         event.enqueueWork {
-            MinecraftForge.EVENT_BUS.addListener(::onServerInit)
-            MinecraftForge.EVENT_BUS.addListener(::onPlayerLogin)
-            MinecraftForge.EVENT_BUS.addListener(::onRegisterCommands)
+            MinecraftForge.EVENT_BUS.addListener(::onClientTick)
+            MinecraftForge.EVENT_BUS.addListener(::registerBindings)
         }
-    }
-
-
-    private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
-
-    }
-
-
-    fun onRegisterCommands(event: net.minecraftforge.event.RegisterCommandsEvent) {
-        CommandsRegister.register(event.dispatcher)
     }
 
     private fun registerBindings(event: RegisterKeyMappingsEvent) {
         event.register(KeyBinds.ActivateSkill)
     }
+
 
     private fun onClientTick(event: ClientTickEvent) {
         if (event.phase == TickEvent.Phase.END) {
@@ -85,11 +70,24 @@ object ForgeMod {
         }
     }
 
+    //common
+    private fun onCommonSetup(event: FMLCommonSetupEvent) {
+        event.enqueueWork {
+            MinecraftForge.EVENT_BUS.addListener(::onServerInit)
+            MinecraftForge.EVENT_BUS.addListener(::onPlayerLogin)
+            MinecraftForge.EVENT_BUS.addListener(::onRegisterCommands)
+        }
+    }
+
     private fun onServerInit(event: LevelEvent.Load) {
         val level = event.level
         if (level is ServerLevel) {
             CooldownStorage.get(level)
         }
+    }
+
+    private fun onRegisterCommands(event: net.minecraftforge.event.RegisterCommandsEvent) {
+        CommandsRegister.register(event.dispatcher)
     }
 
     private fun onPlayerLogin(event: PlayerEvent) {
@@ -101,6 +99,7 @@ object ForgeMod {
                     player = player
                 )
             }
+
             is PlayerEvent.PlayerLoggedOutEvent -> {
                 SkillCooldownManager.onPlayerDisconnect(
                     level = player.serverLevel(),
@@ -112,5 +111,8 @@ object ForgeMod {
 
     }
 
+    //dedicated server
+    private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
 
+    }
 }

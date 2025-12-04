@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.base.SkillKey
 
 data class ArrowsHailSkill(
     override val selected: Boolean,
@@ -13,6 +14,11 @@ data class ArrowsHailSkill(
     override val charges: Int,
     override val maxCooldown: Int
 ) : Skill {
+
+    override val key: SkillKey
+        get() = KEY
+
+
     companion object {
         val KEY = Skill.createKey(ArrowsHailSkill::class)
 
@@ -36,12 +42,18 @@ data class ArrowsHailSkill(
                     buf.writeVarInt(value.maxCooldown)
                 },
                 { buf ->
-                    val enabled = buf.readBoolean()
+                    val selected = buf.readBoolean()
                     val armed = buf.readBoolean()
                     val charges = buf.readVarInt()
                     val maxCharges = buf.readVarInt()
                     val maxCooldown = buf.readVarInt()
-                    ArrowsHailSkill(enabled, armed, charges, maxCharges, maxCooldown)
+                    ArrowsHailSkill(
+                        selected = selected,
+                        armed = armed,
+                        maxCharges = maxCharges,
+                        charges = charges,
+                        maxCooldown = maxCooldown
+                    )
                 }
             )
     }

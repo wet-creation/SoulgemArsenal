@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import ua.com.xela.soulgem_arsenal.network.payload.activation.SkillActivationPayload
-import ua.com.xela.soulgem_arsenal.network.server.CooldownStorage
+import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
 import ua.com.xela.soulgem_arsenal.skills.system.SkillEvents
 

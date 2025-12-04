@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.network.server
+package ua.com.xela.soulgem_arsenal.platform.server
 
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -11,6 +11,7 @@ import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
 import ua.com.xela.soulgem_arsenal.skills.base.ItemInstanceId
 import ua.com.xela.soulgem_arsenal.skills.base.SkillKey
 import java.util.UUID
+import kotlin.collections.iterator
 
 class CooldownStorage : SavedData() {
     data class CooldownState(
@@ -54,9 +55,7 @@ class CooldownStorage : SavedData() {
         //key
         private const val PLAYER_ID = "PlayerId"
         private const val SKILL_ID_PATH = "SkillIdPath"
-        private const val HAND = "HAND"
         private const val ITEM_ID = "ItemId"
-        private const val SLOT = "Slot"
 
         //values
         private const val END_GAME_TIME = "EndGameTime"

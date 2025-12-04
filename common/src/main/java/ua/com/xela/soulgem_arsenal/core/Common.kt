@@ -30,4 +30,10 @@ object Common {
         }
         return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name)
     }
+
+    fun getResourceLocation(name: String): ResourceLocation {
+        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name)
+    }
+
+
 }

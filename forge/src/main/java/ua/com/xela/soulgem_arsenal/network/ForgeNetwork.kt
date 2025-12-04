@@ -6,7 +6,7 @@ import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.network.ChannelBuilder
 import net.minecraftforge.network.SimpleChannel
 import ua.com.xela.soulgem_arsenal.core.Common
-import ua.com.xela.soulgem_arsenal.network.client.ClientCooldownTracker
+import ua.com.xela.soulgem_arsenal.platform.client.ClientCooldownTracker
 import ua.com.xela.soulgem_arsenal.network.payload.activation.SkillActivationPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload

@@ -2,13 +2,16 @@ package ua.com.xela.soulgem_arsenal.client
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
-import ua.com.xela.soulgem_arsenal.network.client.ClientCooldownTracker
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.minecraft.client.Minecraft
+import ua.com.xela.soulgem_arsenal.platform.client.ClientCooldownTracker
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownFinishedPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownStartPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownTickPayload
 import ua.com.xela.soulgem_arsenal.platform.api.Services
+import ua.com.xela.soulgem_arsenal.platform.client.ClientCooldownHud
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 
 object FabricClientHooks {
@@ -32,6 +35,14 @@ object FabricClientHooks {
             }
         }
 
+    }
+
+    private fun guiRender() {
+        HudRenderCallback.EVENT.register { matrices, delta ->
+            val mc = Minecraft.getInstance()
+            val window = mc.window
+            ClientCooldownHud.render(matrices, window)
+        }
     }
 
     private fun cooldownCanceled() {
@@ -67,12 +78,13 @@ object FabricClientHooks {
     }
 
 
-   private fun registerReceivers() {
+    private fun registerReceivers() {
         cooldownCanceled()
         cooldownStart()
         cooldownChargeRestored()
         cooldownFinished()
         sendActiveSkill()
         cooldownTick()
+        guiRender()
     }
 }

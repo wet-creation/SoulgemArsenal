@@ -1,6 +1,5 @@
-package ua.com.xela.soulgem_arsenal.network.client
+package ua.com.xela.soulgem_arsenal.platform.client
 
-import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownFinishedPayload
@@ -32,7 +31,6 @@ object ClientCooldownTracker {
         val key = payload.key.toCooldownKey()
         val current = states[key] ?: return
         states[key] = current.copy(remainingSeconds = payload.remainingSeconds)
-        Constants.LOG.info("time % for ${key.skill.id.path} left ${getProgress(key) * 100}")
 
     }
 

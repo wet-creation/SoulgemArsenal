@@ -11,7 +11,7 @@ interface Skill {
     //is ready for use
     val armed: Boolean
 
-    //cooldown in seconds for next recharge
+    //max charges on item
     val maxCharges: Int
 
     //cooldown in seconds for next recharge
@@ -19,6 +19,8 @@ interface Skill {
 
     //count of charges
     val charges: Int
+
+    val key: SkillKey
 
 
     companion object {

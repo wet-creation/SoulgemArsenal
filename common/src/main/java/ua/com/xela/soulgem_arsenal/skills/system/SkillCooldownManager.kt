@@ -4,7 +4,7 @@ import kotlinx.coroutines.Job
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftServerScope
-import ua.com.xela.soulgem_arsenal.network.server.CooldownStorage
+import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.*
@@ -19,11 +19,11 @@ object SkillCooldownManager {
 
     fun resumeForPlayer(level: ServerLevel, player: ServerPlayer) {
         val storage = CooldownStorage.get(level)
+        val listOfInstanceId = player.getAllInstanceId()
 
-        val playerStates = storage.states
-            .filterValues { it.playerId == player.uuid }
+        val statesToResume = storage.states.filterKeys { listOfInstanceId.contains(it.itemId) }
 
-        for ((key, stored) in playerStates) {
+        statesToResume.forEach { (key, stored) ->
             resumeSingleCooldown(player, key, stored)
         }
     }

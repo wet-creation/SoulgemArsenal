@@ -4,7 +4,11 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
+import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.base.SkillKey
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
 
 
 data class TeleportSkill(
@@ -17,6 +21,10 @@ data class TeleportSkill(
 
     val armedOrEnabled = selected || armed
     val armedAndEnabled = selected && armed
+
+    override val key: SkillKey
+        get() = KEY
+
 
     companion object {
         val KEY = Skill.createKey(TeleportSkill::class)
@@ -46,7 +54,13 @@ data class TeleportSkill(
                     val charges = buf.readVarInt()
                     val maxCharges = buf.readVarInt()
                     val maxCooldown = buf.readVarInt()
-                    TeleportSkill(enabled, armed, charges, maxCharges, maxCooldown)
+                    TeleportSkill(
+                        selected = enabled,
+                        armed = armed,
+                        charges = charges,
+                        maxCharges = maxCharges,
+                        maxCooldown = maxCooldown
+                    )
                 }
             )
     }

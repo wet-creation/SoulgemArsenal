@@ -3,7 +3,6 @@ package ua.com.xela.soulgem_arsenal.registry
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.StringArgumentType
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
@@ -11,12 +10,10 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
+import ua.com.xela.soulgem_arsenal.skills.base.SkillEntry
 import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
-import ua.com.xela.soulgem_arsenal.skills.base.setSkillDynamic
 import ua.com.xela.soulgem_arsenal.skills.base.toDebugString
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
-import kotlin.reflect.KClass
+import ua.com.xela.soulgem_arsenal.skills.system.SkillFactory
 
 object CommandsRegister {
 
@@ -40,7 +37,7 @@ object CommandsRegister {
                     1
                 }
                 .then(
-                    Commands.argument("target", EntityArgument.player())
+                    argument("target", EntityArgument.player())
                         .executes { ctx ->
                             val source = ctx.source
                             val target = EntityArgument.getPlayer(ctx, "target")
@@ -136,8 +133,7 @@ object CommandsRegister {
             )
             return 0
         }
-
-        stack.setSkillDynamic(skill.first, skill.second)
+        SkillFactory.applySkillEntry(stack, skill)
 
         source.sendSuccess(
             { Component.literal("Skill '$skillId' added to player main hand ${player.scoreboardName}.") },
@@ -149,27 +145,15 @@ object CommandsRegister {
 
 }
 
-private fun createSkillById(id: String): Pair<KClass<out Skill>, Skill>? {
+private fun createSkillById(id: String): SkillEntry<out Skill>? {
 
     return when (id.lowercase()) {
         "teleport" -> {
-            TeleportSkill::class to TeleportSkill(
-                selected = true,
-                armed = true,
-                charges = 3,
-                maxCharges = 3,
-                maxCooldown = 20,
-            )
+            SkillFactory.Teleport
         }
 
         "arrows_hail" -> {
-            ArrowsHailSkill::class to ArrowsHailSkill(
-                selected = true,
-                armed = true,
-                charges = 3,
-                maxCharges = 1,
-                maxCooldown = 20,
-            )
+            SkillFactory.ArrowsHail
         }
 
         else -> null
