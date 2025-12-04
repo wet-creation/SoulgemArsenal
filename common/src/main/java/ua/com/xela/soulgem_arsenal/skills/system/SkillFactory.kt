@@ -28,8 +28,8 @@ object SkillFactory {
         TeleportSkill(
             selected = true,
             armed = false,
-            charges = 1,
-            maxCharges = 1,
+            charges = 3,
+            maxCharges = 3,
             maxCooldown = 20
         )
     }

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.Window
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.world.item.ItemStack
-import ua.com.xela.soulgem_arsenal.registry.SkillIcons
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
 import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
@@ -59,7 +58,6 @@ object ClientCooldownHud {
 
         val progress = ClientCooldownTracker.getProgress(key).coerceIn(0f, 1f)
 
-        // Заряды / максимум (адаптируй под свою модель)
 
 
         val pose = graphics.pose()
@@ -94,8 +92,6 @@ object ClientCooldownHud {
 
         pose.popPose()
 
-        // Текст "charges / max" справа от иконки
-
     }
 
 
@@ -108,9 +104,9 @@ object ClientCooldownHud {
     }
 
     private fun GuiGraphics.drawSkillIcon(skill: Skill, itemStack: ItemStack) {
-        SkillIcons.getIcon(skill.key)?.let {
+        SkillGUI.getSkillGUIComponents(skill.key)?.let {
             blit(
-                it,
+                it.icon,
                 iconX,
                 iconY,
                 0f,

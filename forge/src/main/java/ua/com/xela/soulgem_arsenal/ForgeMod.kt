@@ -1,10 +1,13 @@
 package ua.com.xela.soulgem_arsenal
 
+import com.mojang.datafixers.util.Either
 import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraftforge.client.event.CustomizeGuiOverlayEvent
+import net.minecraft.world.item.ItemStack
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
+import net.minecraftforge.client.event.RenderTooltipEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.TickEvent.ClientTickEvent
@@ -19,11 +22,14 @@ import thedarkcolour.kotlinforforge.forge.runForDist
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.network.ForgeNetwork
-import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
+import ua.com.xela.soulgem_arsenal.platform.SoulgemTooltipFactoryRegistry
 import ua.com.xela.soulgem_arsenal.platform.api.Services
+import ua.com.xela.soulgem_arsenal.platform.client.SkillGUI
+import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
+import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
 import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
 
 @Mod(Constants.MOD_ID)
@@ -34,6 +40,8 @@ object ForgeMod {
         Common.init()
 
         MOD_BUS.addListener(::onCommonSetup)
+        MinecraftForge.EVENT_BUS.addListener(SoulgemTooltipFactoryRegistry::registerTooltipFactories)
+
         ForgeNetwork.registerReceivers()
         runForDist(
             clientTarget = {
@@ -52,6 +60,7 @@ object ForgeMod {
         event.enqueueWork {
             MinecraftForge.EVENT_BUS.addListener(::onClientTick)
             MinecraftForge.EVENT_BUS.addListener(::registerBindings)
+            MinecraftForge.EVENT_BUS.addListener(::onGatherComponents)
         }
     }
 
@@ -68,6 +77,25 @@ object ForgeMod {
                 Services.NETWORK_CLIENT.sendActivateSkill()
             }
         }
+    }
+
+    private fun onGatherComponents(event: RenderTooltipEvent.GatherComponents) {
+        val stack: ItemStack = event.itemStack
+        if (stack.isEmpty) return
+
+        val skills = stack.getAllSkills()
+        if (skills.isEmpty()) return
+
+        val tooltipElements = event.tooltipElements
+
+        tooltipElements.add(Either.left(Component.empty()))
+        skills.forEach { skill ->
+            val key = skill.key
+            val component = SkillGUI.getSkillGUIComponents(key) ?: return
+
+            tooltipElements.add(Either.right(component))
+        }
+
     }
 
     //common

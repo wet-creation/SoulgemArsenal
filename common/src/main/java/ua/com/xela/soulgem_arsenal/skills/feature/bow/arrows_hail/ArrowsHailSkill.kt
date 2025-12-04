@@ -26,8 +26,8 @@ data class ArrowsHailSkill(
             inst.group(
                 Codec.BOOL.fieldOf("selected").forGetter(ArrowsHailSkill::selected),
                 Codec.BOOL.fieldOf("armed").forGetter(ArrowsHailSkill::armed),
-                Codec.INT.fieldOf("charges").forGetter(ArrowsHailSkill::charges),
                 Codec.INT.fieldOf("maxCharges").forGetter(ArrowsHailSkill::maxCharges),
+                Codec.INT.fieldOf("charges").forGetter(ArrowsHailSkill::charges),
                 Codec.INT.fieldOf("maxCooldown").forGetter(ArrowsHailSkill::maxCooldown),
             ).apply(inst, ::ArrowsHailSkill)
         }
@@ -42,16 +42,16 @@ data class ArrowsHailSkill(
                     buf.writeVarInt(value.maxCooldown)
                 },
                 { buf ->
-                    val selected = buf.readBoolean()
+                    val enabled = buf.readBoolean()
                     val armed = buf.readBoolean()
                     val charges = buf.readVarInt()
                     val maxCharges = buf.readVarInt()
                     val maxCooldown = buf.readVarInt()
                     ArrowsHailSkill(
-                        selected = selected,
+                        selected = enabled,
                         armed = armed,
-                        maxCharges = maxCharges,
                         charges = charges,
+                        maxCharges = maxCharges,
                         maxCooldown = maxCooldown
                     )
                 }

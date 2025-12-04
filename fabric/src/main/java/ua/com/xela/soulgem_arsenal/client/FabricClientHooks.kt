@@ -1,18 +1,17 @@
 package ua.com.xela.soulgem_arsenal.client
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.Minecraft
-import ua.com.xela.soulgem_arsenal.platform.client.ClientCooldownTracker
-import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
-import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload
-import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownFinishedPayload
-import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownStartPayload
-import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownTickPayload
+import net.minecraft.network.chat.Component
+import ua.com.xela.soulgem_arsenal.network.payload.cooldown.*
 import ua.com.xela.soulgem_arsenal.platform.api.Services
-import ua.com.xela.soulgem_arsenal.platform.client.ClientCooldownHud
+import ua.com.xela.soulgem_arsenal.platform.client.*
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
+import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
 
 object FabricClientHooks {
     fun init() {
@@ -26,6 +25,39 @@ object FabricClientHooks {
                 Services.NETWORK_CLIENT.sendActivateSkill()
             }
         }
+    }
+
+    private fun tooltipRender() {
+        TooltipComponentCallback.EVENT.register { data ->
+            when (data) {
+                is SkillTooltipComponent -> SkillTooltipClientComponent(data)
+                else -> null
+            }
+        }
+        ItemTooltipCallback.EVENT.register(ItemTooltipCallback { stack, _, _, lines ->
+            if (stack.isEmpty)  return@ItemTooltipCallback
+            val skills = stack.getAllSkills()
+            if (skills.isEmpty()) return@ItemTooltipCallback
+
+            lines.add(Component.empty())
+            skills.forEach { skill ->
+                val key = skill.key
+                val component = SkillGUI.getSkillGUIComponents(key) ?: return@ItemTooltipCallback
+
+
+                lines.add(
+                    Component.literal("")
+                        .append(Component.literal("${component.symbol} ").withStyle(component.symbolColor))
+                        .append(component.name.copy().withStyle(component.titleColor))
+                )
+
+                lines.add(
+                    component.description.copy().withStyle(component.descColor)
+                )
+            }
+
+
+        })
     }
 
     private fun cooldownStart() {
@@ -86,5 +118,6 @@ object FabricClientHooks {
         sendActiveSkill()
         cooldownTick()
         guiRender()
+        tooltipRender()
     }
 }
