@@ -5,10 +5,6 @@ import net.minecraft.core.UUIDUtil
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.item.ItemStack
 import java.util.*
 
 
@@ -32,41 +28,7 @@ value class ItemInstanceId(val value: UUID) {
             )
 
 
-        fun findStackById(
-            server: MinecraftServer,
-            id: ItemInstanceId
-        ): ItemStack? {
-            for (player in server.playerList.players) {
-                findInPlayer(player, id)?.let { return it }
-            }
 
-            for (level in server.allLevels) {
-                for (entity in level.allEntities) {
-                    if (entity is ItemEntity) {
-                        val stack = entity.item
-                        if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) {
-                            return stack
-                        }
-                    }
-                }
-            }
-
-            return null
-        }
-
-        private fun findInPlayer(player: ServerPlayer, id: ItemInstanceId): ItemStack? {
-            listOf(player.mainHandItem, player.offhandItem).forEach { stack ->
-                if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) return stack
-            }
-
-            val inv = player.inventory
-            for (slot in 0 until inv.containerSize) {
-                val stack = inv.getItem(slot)
-                if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) return stack
-            }
-
-            return null
-        }
 
 
     }

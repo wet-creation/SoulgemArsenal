@@ -20,7 +20,9 @@ class CooldownStorage : SavedData() {
         val currentChargeIndex: Int,
         val playerId: UUID,
         val chargeToRestore: Int,
-        val endGameTime: Long
+        val endGameTime: Long,
+        val itemOnPlayer: Boolean = false,
+        val appliedCharges: Int
     )
 
     val states: MutableMap<CooldownKey, CooldownState> = mutableMapOf()
@@ -41,10 +43,12 @@ class CooldownStorage : SavedData() {
             entry.putInt(REMAINING_SECONDS, state.remainingSeconds)
             entry.putInt(CHARGE_TO_RESTORE, state.chargeToRestore)
             entry.putInt(CURRENT_CHARGE_INDEX, state.currentChargeIndex)
+            entry.putBoolean(ON_PLAYER, state.itemOnPlayer)
+            entry.putInt(APPLIED_CHARGES, state.appliedCharges)
+
 
             list.add(entry)
         }
-
         tag.put(LIST_NAME, list)
         return tag
     }
@@ -63,6 +67,8 @@ class CooldownStorage : SavedData() {
         private const val TOTAL_SECONDS_PER_CHARGE = "TotalSeconds"
         private const val CHARGE_TO_RESTORE = "ChargeToRestore"
         private const val CURRENT_CHARGE_INDEX = "ChargeIndexCurrent"
+        private const val APPLIED_CHARGES = "APPLIED_CHARGES"
+        private const val ON_PLAYER = "ON_PLAYER"
 
 
         private const val STORAGE_NAME = "soulegm_arsenal_cooldowns"
@@ -99,6 +105,8 @@ class CooldownStorage : SavedData() {
                 val remainingSeconds = element.getInt(REMAINING_SECONDS)
                 val chargeToRestore = element.getInt(CHARGE_TO_RESTORE)
                 val index = element.getInt(CURRENT_CHARGE_INDEX)
+                val itemOnPlayer = element.getBoolean(ON_PLAYER)
+                val appliedCharges = element.getInt(APPLIED_CHARGES)
 
                 val key = CooldownKey(
                     itemId = itemId,
@@ -111,7 +119,9 @@ class CooldownStorage : SavedData() {
                     totalSecondsPerCharge = totalSeconds,
                     chargeToRestore = chargeToRestore,
                     currentChargeIndex = index,
-                    remainingSeconds = remainingSeconds
+                    remainingSeconds = remainingSeconds,
+                    itemOnPlayer = itemOnPlayer,
+                    appliedCharges = appliedCharges
                 )
 
                 result.states[key] = state
@@ -120,4 +130,17 @@ class CooldownStorage : SavedData() {
             return result
         }
     }
+
+    fun updateState(
+        key: CooldownKey,
+        state: CooldownState?
+    ) {
+        if (state == null) {
+            states.remove(key)
+        } else {
+            states[key] = state
+        }
+        setDirty()
+    }
+
 }

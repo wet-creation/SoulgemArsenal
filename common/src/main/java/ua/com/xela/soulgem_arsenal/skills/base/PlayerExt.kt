@@ -12,9 +12,9 @@ fun Player.getHand(stack: ItemStack): InteractionHand {
 }
 
 
-fun ServerPlayer.getAllInstanceId(): List<ItemInstanceId> {
+fun ServerPlayer.getAllInstanceId(): Set<ItemInstanceId> {
     val player = this
-    return buildList {
+    return buildSet {
         listOf(player.mainHandItem, player.offhandItem).forEach { stack ->
             if (!stack.isEmpty) {
                 stack.getInstanceIdOrNull()?.let {
@@ -35,3 +35,24 @@ fun ServerPlayer.getAllInstanceId(): List<ItemInstanceId> {
 
 
 }
+
+fun ServerPlayer.ownsInstanceId(id: ItemInstanceId): Boolean = findInPlayer(id) != null
+
+fun ServerPlayer.findInPlayer(id: ItemInstanceId): ItemStack? {
+
+    listOf(mainHandItem, offhandItem).forEach { stack ->
+        if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) return stack
+    }
+
+    val inv = inventory
+    for (slot in 0 until inv.containerSize) {
+        val stack = inv.getItem(slot)
+        if (!stack.isEmpty && stack.getInstanceIdOrNull() == id) return stack
+    }
+
+    val carried = containerMenu.carried
+    if (!carried.isEmpty && carried.getInstanceIdOrNull() == id) return carried
+
+    return null
+}
+

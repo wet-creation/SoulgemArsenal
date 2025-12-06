@@ -38,13 +38,11 @@ object ArrowHailSkillBehavior : SkillBehavior<ArrowsHailSkill> {
                 armed = false,
                 charges = skill.charges - 1
             )
-            val hand = player.getHand(ctx.stack)
             ctx.stack.setSkill(newState)
 
             ArrowHailSkillCooldown.startForStack(
                 stack = ctx.stack,
                 player = player,
-                hand = hand,
                 skill = newState
             )
         }
@@ -72,14 +70,15 @@ object ArrowHailSkillBehavior : SkillBehavior<ArrowsHailSkill> {
             arrow.z,
         )
         val heightOfHail = arrow.y + 10
-        val rIteration = 2
-        val iteration = 4
-        val delay = 500L
+        val rIteration = 1.5f
+        val iteration = 5
+        val step = 10
+        val delay = 200L
         MinecraftServerScope.launchInScope {
-            var r = 2
-            while (r != iteration * rIteration) {
+            var r = 1f
+            while (r < iteration * rIteration) {
                 delayAndWaitIfPaused(delay)
-                for (i in 0..360 step 36) {
+                for (i in 0..360 step step) {
                     delayAndWaitIfPaused(50L)
                     val rad = Math.toRadians(i.toDouble())
                     val x: Double = center.x + r * cos(rad)

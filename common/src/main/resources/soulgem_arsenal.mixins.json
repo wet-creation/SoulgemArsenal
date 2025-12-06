@@ -5,12 +5,15 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "mixins": [
-    "server.MixinServerMinecraft",
-    "server.ServerPlayerModifiedMixin",
-    "menu.SmithingMenuMixin",
     "accessor.SmithingMenuAccessor",
     "gameplay.bow.AbstractArrowMixin",
-    "gameplay.bow.BowItemMixin"
+    "gameplay.bow.BowItemMixin",
+    "menu.SmithingMenuMixin",
+    "player.ItemEntityPickupMixin",
+    "player.PlayerInventorySetItemMixin",
+    "player.ServerPlayerDropMixin",
+    "server.MixinServerMinecraft",
+    "server.ServerPlayerModifiedMixin"
   ],
   "client": [
     "client.MixinMinecraft"

@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.client.event.RenderTooltipEvent
 import net.minecraftforge.common.MinecraftForge
@@ -26,7 +27,6 @@ import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
 import ua.com.xela.soulgem_arsenal.platform.SoulgemTooltipFactoryRegistry
 import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.platform.client.SkillGUI
-import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
@@ -109,8 +109,9 @@ object ForgeMod {
 
     private fun onServerInit(event: LevelEvent.Load) {
         val level = event.level
-        if (level is ServerLevel) {
-            CooldownStorage.get(level)
+        if (level is ServerLevel && level.dimension() == Level.OVERWORLD) {
+            SkillCooldownManager.resumeForServer(level.server, level)
+
         }
     }
 
@@ -123,14 +124,12 @@ object ForgeMod {
         when (event) {
             is PlayerEvent.PlayerLoggedInEvent -> {
                 SkillCooldownManager.resumeForPlayer(
-                    level = player.serverLevel(),
                     player = player
                 )
             }
 
             is PlayerEvent.PlayerLoggedOutEvent -> {
                 SkillCooldownManager.onPlayerDisconnect(
-                    level = player.serverLevel(),
                     player = player
                 )
             }

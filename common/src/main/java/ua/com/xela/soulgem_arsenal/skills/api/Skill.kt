@@ -22,6 +22,11 @@ interface Skill {
 
     val key: SkillKey
 
+    val armedOrSelected: Boolean
+        get() = selected || armed
+
+    val armedAndSelected: Boolean
+        get() = selected && armed
 
     companion object {
         fun <T : Any> createKey(clazz: KClass<T>): SkillKey {

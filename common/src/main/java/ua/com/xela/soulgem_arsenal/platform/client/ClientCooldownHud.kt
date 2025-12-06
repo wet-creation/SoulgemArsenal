@@ -55,7 +55,6 @@ object ClientCooldownHud {
         graphics.drawChargesText(charges, maxCharges)
 
         if (!ClientCooldownTracker.hasCooldown(key)) return
-
         val progress = ClientCooldownTracker.getProgress(key).coerceIn(0f, 1f)
 
 

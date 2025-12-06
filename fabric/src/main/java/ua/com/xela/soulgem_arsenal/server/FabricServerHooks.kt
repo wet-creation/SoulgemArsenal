@@ -3,8 +3,9 @@ package ua.com.xela.soulgem_arsenal.server
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.Level
 import ua.com.xela.soulgem_arsenal.network.payload.activation.SkillActivationPayload
-import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
 import ua.com.xela.soulgem_arsenal.skills.system.SkillEvents
 
@@ -18,22 +19,21 @@ object FabricServerHooks {
 
 
     private fun onWorldLoad() {
-        ServerWorldEvents.LOAD.register { _, world ->
-            CooldownStorage.get(world)
-
+        ServerWorldEvents.LOAD.register { server, world ->
+            if (world is ServerLevel && world.dimension() == Level.OVERWORLD)
+                SkillCooldownManager.resumeForServer(server, world)
         }
     }
 
     private fun onPlayerEvents() {
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             val player = handler.player
-            val level = player.serverLevel()
 
-            SkillCooldownManager.resumeForPlayer(level, player)
+            SkillCooldownManager.resumeForPlayer( player)
         }
 
         ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
-            SkillCooldownManager.onPlayerDisconnect(handler.player.serverLevel(), handler.player)
+            SkillCooldownManager.onPlayerDisconnect(handler.player)
         }
     }
 

@@ -33,12 +33,10 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
                armed = false,
                charges = skill.charges - 1
            )
-           val hand = player.getHand(stack = ctx.stack)
            ctx.stack.setSkill(newState)
            TeleportSkillCooldown.startForStack(
                stack = ctx.stack,
                player = player,
-               hand = hand,
                skill = newState
            )
        }
@@ -72,7 +70,7 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
 fun ItemStack.hasTeleportSkill(): Boolean {
     val data = getSkill<TeleportSkill>() ?: return false
-    return data.armedOrEnabled && data.charges > 0
+    return data.armedOrSelected && data.charges > 0
 }
 
 fun ItemStack.armTeleportSkill(): Boolean {

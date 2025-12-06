@@ -16,9 +16,6 @@ data class TeleportSkill(
     override val maxCooldown: Int
 ) : Skill {
 
-    val armedOrEnabled = selected || armed
-    val armedAndEnabled = selected && armed
-
     override val key: SkillKey
         get() = KEY
 
