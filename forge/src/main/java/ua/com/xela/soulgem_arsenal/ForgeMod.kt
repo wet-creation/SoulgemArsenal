@@ -18,15 +18,16 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
+import thedarkcolour.kotlinforforge.forge.DIST
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.network.ForgeNetwork
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
-import ua.com.xela.soulgem_arsenal.platform.SoulgemTooltipFactoryRegistry
+import ua.com.xela.soulgem_arsenal.platform.SoulgemClientRegistry
 import ua.com.xela.soulgem_arsenal.platform.api.Services
-import ua.com.xela.soulgem_arsenal.platform.client.SkillGUI
+import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillGUI
 import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
@@ -38,10 +39,13 @@ object ForgeMod {
     init {
         ForgePlatformHelper.register(MOD_BUS)
         Common.init()
-
         MOD_BUS.addListener(::onCommonSetup)
-        MinecraftForge.EVENT_BUS.addListener(SoulgemTooltipFactoryRegistry::registerTooltipFactories)
 
+        if (DIST.isClient)
+            Common.clientRegistry()
+
+        MinecraftForge.EVENT_BUS.addListener(SoulgemClientRegistry::registerTooltipFactories)
+        MinecraftForge.EVENT_BUS.addListener(SoulgemClientRegistry::onRegisterParticleProviders)
         ForgeNetwork.registerReceivers()
         runForDist(
             clientTarget = {
@@ -67,7 +71,6 @@ object ForgeMod {
     private fun registerBindings(event: RegisterKeyMappingsEvent) {
         event.register(KeyBinds.ActivateSkill)
     }
-
 
     private fun onClientTick(event: ClientTickEvent) {
         if (event.phase == TickEvent.Phase.END) {

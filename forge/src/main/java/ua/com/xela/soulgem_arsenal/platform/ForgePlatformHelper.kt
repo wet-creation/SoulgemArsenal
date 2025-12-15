@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
 import net.minecraft.client.KeyMapping
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.particles.ParticleType
+import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
@@ -19,6 +21,7 @@ import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.api.Platform
 import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
+import ua.com.xela.soulgem_arsenal.registry.DeferredParticle
 
 
 class ForgePlatformHelper : IPlatformHelper {
@@ -27,11 +30,14 @@ class ForgePlatformHelper : IPlatformHelper {
             DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID)
         val dataComponents: DeferredRegister<DataComponentType<*>> =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Constants.MOD_ID)
+        val particles: DeferredRegister<ParticleType<*>> =
+            DeferredRegister.create(Registries.PARTICLE_TYPE, Constants.MOD_ID)
 
 
         fun register(eventBus: IEventBus) {
             items.register(eventBus)
             dataComponents.register(eventBus)
+            particles.register(eventBus)
         }
     }
 
@@ -87,5 +93,18 @@ class ForgePlatformHelper : IPlatformHelper {
         )
 
         return bind
+    }
+
+    override fun registerSimpleParticle(
+        id: String,
+    ): DeferredParticle {
+        val registered = particles.register(id) {
+            SimpleParticleType(false)
+        }
+        return object : DeferredParticle {
+            override fun get(): SimpleParticleType {
+                return registered.get()
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.platform.client
+package ua.com.xela.soulgem_arsenal.platform.client.gui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font

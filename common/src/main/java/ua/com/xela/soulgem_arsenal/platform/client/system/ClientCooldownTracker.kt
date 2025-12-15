@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.platform.client
+package ua.com.xela.soulgem_arsenal.platform.client.system
 
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownCanceledPayload
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.CooldownChargeRestoredPayload

@@ -1,28 +1,33 @@
 package ua.com.xela.soulgem_arsenal.core
 
 import net.minecraft.resources.ResourceLocation
-import ua.com.xela.soulgem_arsenal.registry.ItemIdComponents
-import ua.com.xela.soulgem_arsenal.registry.ModItems
-import ua.com.xela.soulgem_arsenal.registry.SkillComponents
+import ua.com.xela.soulgem_arsenal.registry.*
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowHailSkillBehavior
-import ua.com.xela.soulgem_arsenal.skills.system.SkillBehaviorRegistry
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillBehavior
+import ua.com.xela.soulgem_arsenal.skills.system.SkillBehaviorRegistry
 
 
 object Common {
-   private val keys: MutableSet<String> = mutableSetOf()
+    private val keys: MutableSet<String> = mutableSetOf()
 
     fun init() {
         ModItems.register()
         SkillComponents.register()
         ItemIdComponents.register()
         registerSkillBehaviors()
+        ParticleRegister.registry()
+
     }
 
-    fun registerSkillBehaviors() {
+    private fun registerSkillBehaviors() {
         SkillBehaviorRegistry.register(TeleportSkillBehavior)
         SkillBehaviorRegistry.register(ArrowHailSkillBehavior)
     }
+
+    fun clientRegistry() {
+        ParticleFactory.registry()
+    }
+
 
     fun createResourceLocation(name: String): ResourceLocation {
         check(keys.add(name)) {

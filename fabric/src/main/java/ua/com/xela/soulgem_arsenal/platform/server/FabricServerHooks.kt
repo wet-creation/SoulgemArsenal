@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.server
+package ua.com.xela.soulgem_arsenal.platform.server
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents

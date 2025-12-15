@@ -30,9 +30,12 @@ minecraft {
 
     runs {
         client {
+            Random random = new Random()
+            def suffix = random.nextInt(10 ** 2)
             workingDirectory file('runs/client')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
+            args '--username', 'Client' + suffix
             mods {
                 modClientRun {
                     source sourceSets.main

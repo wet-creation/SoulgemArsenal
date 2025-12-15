@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ua.com.xela.soulgem_arsenal.platform.client.ClientCooldownHud;
+import ua.com.xela.soulgem_arsenal.platform.client.gui.ClientCooldownHud;
 
 @Mixin(Gui.class)
 public class GuiRender {

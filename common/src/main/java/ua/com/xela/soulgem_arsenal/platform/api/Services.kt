@@ -3,6 +3,7 @@ package ua.com.xela.soulgem_arsenal.platform.api
 import ua.com.xela.soulgem_arsenal.core.Constants
 import ua.com.xela.soulgem_arsenal.platform.api.services.INetworkServiceClient
 import ua.com.xela.soulgem_arsenal.platform.api.services.INetworkServiceServer
+import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformClient
 import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import java.util.*
 
@@ -11,6 +12,7 @@ object Services {
     // For example this can be used to check if the code is running on Forge vs Fabric, or to ask the modloader if another
     // mod is loaded.
     val PLATFORM: IPlatformHelper = loadService<IPlatformHelper>()
+    val CLIENT_PLATFORM: IPlatformClient = loadService<IPlatformClient>()
     val NETWORK_SERVER: INetworkServiceServer = loadService<INetworkServiceServer>()
     val NETWORK_CLIENT: INetworkServiceClient = loadService<INetworkServiceClient>()
 

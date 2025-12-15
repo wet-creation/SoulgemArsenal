@@ -4,11 +4,11 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.loader.api.FabricLoader
-import ua.com.xela.soulgem_arsenal.client.FabricClientHooks
+import ua.com.xela.soulgem_arsenal.platform.client.FabricClientHooks
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.network.FabricNetwork
 import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
-import ua.com.xela.soulgem_arsenal.server.FabricServerHooks
+import ua.com.xela.soulgem_arsenal.platform.server.FabricServerHooks
 
 object FabricMod : ModInitializer {
 
@@ -18,6 +18,7 @@ object FabricMod : ModInitializer {
         registerCommands()
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             FabricClientHooks.init()
+            Common.clientRegistry()
         }
 
         FabricServerHooks.init()

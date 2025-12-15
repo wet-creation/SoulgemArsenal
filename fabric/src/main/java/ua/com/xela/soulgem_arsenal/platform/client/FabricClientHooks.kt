@@ -1,4 +1,4 @@
-package ua.com.xela.soulgem_arsenal.client
+package ua.com.xela.soulgem_arsenal.platform.client
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
@@ -9,7 +9,11 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import ua.com.xela.soulgem_arsenal.network.payload.cooldown.*
 import ua.com.xela.soulgem_arsenal.platform.api.Services
-import ua.com.xela.soulgem_arsenal.platform.client.*
+import ua.com.xela.soulgem_arsenal.platform.client.gui.ClientCooldownHud
+import ua.com.xela.soulgem_arsenal.platform.client.system.ClientCooldownTracker
+import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillGUI
+import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillTooltipClientComponent
+import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillTooltipComponent
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills
 

@@ -4,10 +4,12 @@ import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
 import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.KeyMapping
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -18,6 +20,7 @@ import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.platform.api.Platform
 import ua.com.xela.soulgem_arsenal.platform.api.services.IPlatformHelper
 import ua.com.xela.soulgem_arsenal.registry.ComponentRef
+import ua.com.xela.soulgem_arsenal.registry.DeferredParticle
 
 
 class FabricPlatformHelper : IPlatformHelper {
@@ -82,5 +85,23 @@ class FabricPlatformHelper : IPlatformHelper {
         KeyBindingHelper.registerKeyBinding(bind)
 
         return bind
+    }
+
+    override fun registerSimpleParticle(
+        id: String,
+    ): DeferredParticle {
+
+        val particle = FabricParticleTypes.simple()
+        val reg =  Registry.register(
+            BuiltInRegistries.PARTICLE_TYPE,
+            Common.createResourceLocation(id),
+            particle
+        )
+
+        return object : DeferredParticle {
+            override fun get(): SimpleParticleType {
+                return reg
+            }
+        }
     }
 }
