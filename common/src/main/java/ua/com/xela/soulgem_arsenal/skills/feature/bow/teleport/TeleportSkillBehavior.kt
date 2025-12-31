@@ -1,12 +1,9 @@
 package ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport
 
-import net.minecraft.client.multiplayer.ClientLevel
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import ua.com.xela.soulgem_arsenal.registry.ParticleFactory
 import ua.com.xela.soulgem_arsenal.registry.ParticleRegister
 import ua.com.xela.soulgem_arsenal.registry.SkillComponents
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
@@ -68,7 +65,7 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
     private fun teleportToTarget(
         arrow: AbstractArrow,
-        shooter: ServerPlayer
+        shooter: Player
     ) {
 
         spawnTeleportBurst(shooter.level(), shooter.x, shooter.y, shooter.z)
@@ -78,34 +75,17 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
 
     private fun spawnTeleportBurst(level: Level, x: Double, y: Double, z: Double) {
-        if (level.isClientSide) {
-            repeat(25) {
-                ParticleFactory.ChaoticParticleFactory.createParticle(
-                    ParticleRegister.ChaoticParticle.get(),
-                    level as ClientLevel,
-                    x + (level.random.nextDouble() - 0.5) * 0.6,
-                    y + level.random.nextDouble() * 0.6,
-                    z + (level.random.nextDouble() - 0.5) * 0.6,
-                    (level.random.nextDouble() - 0.5) * 0.1,
-                    level.random.nextDouble() * 0.15,
-                    (level.random.nextDouble() - 0.5) * 0.1
-                )
-            }
-        } else {
-            // Правильный мультиплеерный вариант
-            val serverLevel = level as ServerLevel
-            serverLevel.sendParticles(
-                ParticleRegister.ChaoticParticle.get(),
-                x, y, z,
-                25,
-                0.3, 0.3, 0.3,
-                0.08
-            )
+        summonParticle {
+            count = 25
+            this.level = level
+            this.x = x + (level.random.nextDouble() - 0.5) * 0.6
+            this.y = y + (level.random.nextDouble() - 0.5) * 0.6
+            this.z = z + (level.random.nextDouble() - 0.5) * 0.6
+            particleType = ParticleRegister.ChaoticParticle.get()
+            speed = level.random.nextDouble() * 0.15
         }
-
     }
 }
-
 
 
 fun ItemStack.hasTeleportSkill(): Boolean {
