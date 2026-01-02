@@ -5,6 +5,18 @@ import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import kotlin.reflect.KClass
 
 
+inline fun <T : Skill> ActivationContext.defaultFlow(
+    skill: T,
+    block: ActivationContext.(ModifiedPlayer) -> Skill
+): Skill? {
+    if (player !is ModifiedPlayer) return null
+
+    if (!skill.selected) return null
+    if (skill.charges <= 0) return null
+    return block(player)
+}
+
+
 inline fun <T : Skill> BowShotContext.defaultFlow(
     skill: T,
     skillClass: KClass<out Skill>,

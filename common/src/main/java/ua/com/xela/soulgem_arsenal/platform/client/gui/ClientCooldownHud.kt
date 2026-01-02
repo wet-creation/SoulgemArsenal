@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.Window
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.world.item.ItemStack
+import ua.com.xela.soulgem_arsenal.platform.client.registries.SkillGUI
 import ua.com.xela.soulgem_arsenal.platform.client.system.ClientCooldownTracker
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.CooldownKey
@@ -63,7 +64,6 @@ object ClientCooldownHud {
         val pose = graphics.pose()
         pose.pushPose()
 
-        // Фон под иконкой — показываем, когда скилл не фулл
         if (progress < 1f || charges < maxCharges) {
             graphics.fill(
                 bgX,

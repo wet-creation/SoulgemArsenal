@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#soulgem_arsenal:skills/bow_skills"
+    "#soulgem_arsenal:skills/bow_skills",
+    "#soulgem_arsenal:skills/swords_skills"
   ]
 }

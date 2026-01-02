@@ -1,12 +1,17 @@
 {
+  "item.soulgem_arsenal.skill_template": "Skill Template",
   "item.soulgem_arsenal.teleport_gem": "Teleport Gem",
   "item.soulgem_arsenal.arrows_hail_gem": "Arrows hail Gem",
-  "item.soulgem_arsenal.skill_template": "Skill Template",
+  "item.soulgem_arsenal.strength_gem": "Strength Gem",
 
   "tooltip.skill.soulgem_arsenal.teleport.name": "Teleport",
   "tooltip.skill.soulgem_arsenal.teleport.desc": "Instantly dash to your arrow.",
+
   "tooltip.skill.soulgem_arsenal.arrows_hail.name": "Arrows Hail",
   "tooltip.skill.soulgem_arsenal.arrows_hail.desc": "Rain multiple arrows on impact.",
+
+  "tooltip.skill.soulgem_arsenal.strength.name": "Strength",
+  "tooltip.skill.soulgem_arsenal.strength.desc": "Gives strength to the owner",
 
   "key.categories.soulgem_arsenal.keybinding_category": "Soulgem Arsenal",
   "key.soulgem_arsenal.activate_skill": "Activate Skill"

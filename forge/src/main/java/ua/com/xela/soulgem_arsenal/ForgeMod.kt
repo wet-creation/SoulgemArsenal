@@ -27,7 +27,7 @@ import ua.com.xela.soulgem_arsenal.network.ForgeNetwork
 import ua.com.xela.soulgem_arsenal.platform.ForgePlatformHelper
 import ua.com.xela.soulgem_arsenal.platform.SoulgemClientRegistry
 import ua.com.xela.soulgem_arsenal.platform.api.Services
-import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillGUI
+import ua.com.xela.soulgem_arsenal.platform.client.registries.SkillGUI
 import ua.com.xela.soulgem_arsenal.registry.CommandsRegister
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
 import ua.com.xela.soulgem_arsenal.skills.base.getAllSkills

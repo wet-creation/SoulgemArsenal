@@ -9,12 +9,9 @@ import ua.com.xela.soulgem_arsenal.core.coroutines.MinecraftServerScope
 import ua.com.xela.soulgem_arsenal.core.utils.orRandom
 import ua.com.xela.soulgem_arsenal.platform.server.CooldownStorage
 import ua.com.xela.soulgem_arsenal.platform.api.Services
+import ua.com.xela.soulgem_arsenal.skills.api.SkillCooldown
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.base.*
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowHailSkillCooldown
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
-import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillCooldown
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -25,6 +22,22 @@ object SkillCooldownManager {
 
     private val activeJobs = ConcurrentHashMap<CooldownKey, Job>()
     private val cooldownSubscribers: MutableMap<CooldownKey, ServerPlayer> = mutableMapOf()
+    private val skillCooldowns: MutableMap<SkillKey, SkillCooldown<out Skill>> = mutableMapOf()
+
+    inline fun <reified T : Skill> onCharge(
+        player: ServerPlayer,
+        id: ItemInstanceId,
+        updater: (T) -> T
+    ) {
+        val stack = player.findInPlayer(id = id) ?: return
+        val current = stack.getSkill<T>() ?: return
+        val updated = updater(current)
+        stack.setSkill(updated)
+    }
+
+    fun register(pair: Pair<SkillKey, SkillCooldown<out Skill>>) {
+        skillCooldowns.putIfAbsent(pair.first, pair.second)
+    }
 
     fun resumeForPlayer(player: ServerPlayer) {
         val storage = CooldownStorage.get(this.level)
@@ -40,7 +53,7 @@ object SkillCooldownManager {
         this.level = level
         this.server = server
         val storage = CooldownStorage.get(level)
-        val statesToResume = storage.states.filterValues { it.itemOnPlayer.not() }
+        val statesToResume = storage.states.filterValues { it.wasCanceled.not() }
 
         statesToResume.forEach { (key, stored) ->
             val player = server.playerList.getPlayer(stored.playerId)
@@ -56,7 +69,7 @@ object SkillCooldownManager {
 
         val statesToCancel = storage.states.filterKeys { listOfInstanceId.contains(it.itemId) }
         statesToCancel.keys.forEach { key ->
-            cancel(player, key, true)
+            cancel(player, key)
             cooldownSubscribers.remove(key)
         }
     }
@@ -112,50 +125,6 @@ object SkillCooldownManager {
         }
     }
 
-
-    private fun resumeSingleCooldown(
-        player: ServerPlayer?,
-        key: CooldownKey,
-        stored: CooldownStorage.CooldownState,
-    ) {
-        startCooldown(
-            player = player,
-            skillKey = key.skill,
-            itemId = key.itemId,
-            chargesToRestore = stored.chargeToRestore - stored.currentChargeIndex,
-            secondsPerCharge = stored.totalSecondsPerCharge,
-        )
-    }
-
-
-    fun defaultChargeFlow(
-        id: ItemInstanceId,
-        player: ServerPlayer,
-        key: SkillKey,
-        charge: Int
-    ) {
-        when (key) {
-            TeleportSkill.KEY -> TeleportSkillCooldown.onCharge(player, id, charge)
-            ArrowsHailSkill.KEY -> ArrowHailSkillCooldown.onCharge(player, id, charge)
-            else -> error("$key WAS NOT mapped for cooldown restore")
-        }
-    }
-
-    inline fun <reified T : Skill> onCharge(
-        player: ServerPlayer,
-        id: ItemInstanceId,
-        updater: (T) -> T
-    ) {
-        val stack = player.findInPlayer(id = id) ?: return
-        val current = stack.getSkill<T>() ?: return
-        val updated = updater(current)
-        stack.setSkill(updated)
-    }
-
-    fun clearStorage(key: CooldownKey) {
-        val storage = CooldownStorage.get(level)
-        storage.updateState(key, null)
-    }
 
     fun startCooldown(
         player: ServerPlayer?,
@@ -267,13 +236,38 @@ object SkillCooldownManager {
         activeJobs[key] = job
     }
 
-    fun cancel(player: ServerPlayer, key: CooldownKey, itemOnPlayer: Boolean = false) {
+    private fun resumeSingleCooldown(
+        player: ServerPlayer?,
+        key: CooldownKey,
+        stored: CooldownStorage.CooldownState,
+    ) {
+        startCooldown(
+            player = player,
+            skillKey = key.skill,
+            itemId = key.itemId,
+            chargesToRestore = stored.chargeToRestore - stored.currentChargeIndex,
+            secondsPerCharge = stored.totalSecondsPerCharge,
+        )
+    }
+
+
+    private fun defaultChargeFlow(
+        id: ItemInstanceId,
+        player: ServerPlayer,
+        key: SkillKey,
+        charge: Int
+    ) {
+        skillCooldowns[key]?.onCharge(player, id, charge) ?: error("$key WAS NOT mapped for cooldown restore")
+    }
+
+
+    private fun cancel(player: ServerPlayer, key: CooldownKey) {
         val storage = CooldownStorage.get(level)
 
         updateStorage(
             key,
             storage.states[key]?.copy(
-                itemOnPlayer = itemOnPlayer
+                wasCanceled = true
             )
         )
         activeJobs.remove(key)?.cancel()
@@ -350,6 +344,11 @@ object SkillCooldownManager {
         val cooldownTicks: Long = this.toLong() * 20L
         return now + cooldownTicks
 
+    }
+
+    private fun clearStorage(key: CooldownKey) {
+        val storage = CooldownStorage.get(level)
+        storage.updateState(key, null)
     }
 
 }

@@ -149,11 +149,13 @@ private fun createSkillById(id: String): SkillEntry<out Skill>? {
 
     return when (id.lowercase()) {
         "teleport" -> {
-            SkillFactory.Teleport
+            SkillFactory.BowTeleport
         }
-
         "arrows_hail" -> {
-            SkillFactory.ArrowsHail
+            SkillFactory.BowArrowsHail
+        }
+        "strength" -> {
+            SkillFactory.SwordStrength
         }
 
         else -> null

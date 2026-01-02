@@ -16,18 +16,15 @@ object TeleportSkillBehavior : SkillBehavior<TeleportSkill> {
 
     override val skillClass: KClass<TeleportSkill> = TeleportSkill::class
 
-    override fun onActivate(ctx: ActivationContext): Skill? {
-        val skill = ctx.skill as? TeleportSkill ?: return null
+    override fun onActivate(ctx: ActivationContext): Skill? =
+        ctx.defaultFlow(ctx.skill) {
+            val skill = ctx.skill as? TeleportSkill ?: return null
+            val newSkill = skill.copy(
+                armed = !skill.armed
+            )
 
-        if (!skill.selected) return null
-        if (skill.charges <= 0) return null
-
-        val newSkill = skill.copy(
-            armed = !skill.armed
-        )
-
-        return newSkill
-    }
+            return newSkill
+        }
 
     override fun onBowShot(skill: TeleportSkill, ctx: BowShotContext) {
         ctx.defaultFlow(skill, skillClass) {

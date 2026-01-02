@@ -18,18 +18,15 @@ object ArrowHailSkillBehavior : SkillBehavior<ArrowsHailSkill> {
     override val skillClass: KClass<ArrowsHailSkill>
         get() = ArrowsHailSkill::class
 
-    override fun onActivate(ctx: ActivationContext): Skill? {
-        val skill = ctx.skill as? ArrowsHailSkill ?: return null
+    override fun onActivate(ctx: ActivationContext): Skill? =
+        ctx.defaultFlow(ctx.skill) {
+            val skill = ctx.skill as? ArrowsHailSkill ?: return null
+            val newSkill = skill.copy(
+                armed = !skill.armed
+            )
 
-        if (!skill.selected) return null
-        if (skill.charges <= 0) return null
-
-        val newSkill = skill.copy(
-            armed = !skill.armed
-        )
-
-        return newSkill
-    }
+            return newSkill
+        }
 
     override fun onBowShot(skill: ArrowsHailSkill, ctx: BowShotContext) {
         super.onBowShot(skill, ctx)

@@ -8,8 +8,9 @@ import ua.com.xela.soulgem_arsenal.skills.base.SkillEntry
 
 object SkillAttachItems {
     val byItem: Map<Item, SkillEntry<out Skill>> = mapOf(
-        ModItems.TeleportGem to SkillFactory.Teleport,
-        ModItems.ArrowsHailGem to SkillFactory.ArrowsHail,
+        ModItems.TeleportGem to SkillFactory.BowTeleport,
+        ModItems.ArrowsHailGem to SkillFactory.BowArrowsHail,
+        ModItems.StrengthGem to SkillFactory.SwordStrength,
         )
 
     fun onSmithingResult(addition: ItemStack, result: ItemStack) {

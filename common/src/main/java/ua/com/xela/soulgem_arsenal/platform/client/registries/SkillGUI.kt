@@ -1,17 +1,20 @@
-package ua.com.xela.soulgem_arsenal.platform.client.gui
+package ua.com.xela.soulgem_arsenal.platform.client.registries
 
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import ua.com.xela.soulgem_arsenal.core.Common
 import ua.com.xela.soulgem_arsenal.core.Constants
+import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillTooltipComponent
 import ua.com.xela.soulgem_arsenal.skills.base.SkillKey
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.feature.sword.strength.StrengthSkill
 
 object SkillGUI {
 
     private const val TELEPORT = "teleport"
     private const val ARROWS_HAIL= "arrows_hail"
+    private const val STRENGTH = "strength"
 
     private val map: Map<SkillKey, SkillTooltipComponent> = mapOf(
         TeleportSkill.KEY to SkillTooltipComponent(
@@ -26,6 +29,15 @@ object SkillGUI {
             description = ARROWS_HAIL.toDescription(),
             symbol = "◆"
         ),
+
+        StrengthSkill.KEY to SkillTooltipComponent(
+            icon = STRENGTH.toIcon(),
+            name = STRENGTH.toName(),
+            description = STRENGTH.toDescription(),
+            symbol = "◆"
+        ),
+
+
     )
 
     private fun String.toName(): Component {

@@ -11,7 +11,7 @@ import ua.com.xela.soulgem_arsenal.network.payload.cooldown.*
 import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.platform.client.gui.ClientCooldownHud
 import ua.com.xela.soulgem_arsenal.platform.client.system.ClientCooldownTracker
-import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillGUI
+import ua.com.xela.soulgem_arsenal.platform.client.registries.SkillGUI
 import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillTooltipClientComponent
 import ua.com.xela.soulgem_arsenal.platform.client.gui.SkillTooltipComponent
 import ua.com.xela.soulgem_arsenal.registry.KeyBinds
@@ -74,7 +74,7 @@ object FabricClientHooks {
     }
 
     private fun guiRender() {
-        HudRenderCallback.EVENT.register { matrices, delta ->
+        HudRenderCallback.EVENT.register { matrices, _ ->
             val mc = Minecraft.getInstance()
             val window = mc.window
             ClientCooldownHud.render(matrices, window)

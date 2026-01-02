@@ -5,6 +5,7 @@ import ua.com.xela.soulgem_arsenal.platform.api.Services
 import ua.com.xela.soulgem_arsenal.skills.api.Skill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
+import ua.com.xela.soulgem_arsenal.skills.feature.sword.strength.StrengthSkill
 import kotlin.reflect.KClass
 
 interface ComponentRef<T> {
@@ -19,6 +20,9 @@ object SkillComponents {
     lateinit var ArrowsHail: ComponentRef<ArrowsHailSkill>
         private set
 
+    lateinit var Strength: ComponentRef<StrengthSkill>
+        private set
+
 
     lateinit var skills: Map<KClass<out Skill>, ComponentRef<out Skill>>
 
@@ -28,19 +32,25 @@ object SkillComponents {
 
     fun register() {
         Teleport = Services.PLATFORM.registerDataComponent(
-            "bow_skill_teleport",
+            "bow_teleport_skill",
             TeleportSkill.CODEC,
             TeleportSkill.STREAM_CODEC
         )
         ArrowsHail = Services.PLATFORM.registerDataComponent(
-            "arrows_hail_skill_teleport",
+            "bow_arrows_hail_skill",
             ArrowsHailSkill.CODEC,
             ArrowsHailSkill.STREAM_CODEC
+        )
+        Strength = Services.PLATFORM.registerDataComponent(
+            "sword_strength_skill",
+            StrengthSkill.CODEC,
+            StrengthSkill.STREAM_CODEC
         )
 
         skills = buildMap {
             put(TeleportSkill::class, Teleport)
             put(ArrowsHailSkill::class, ArrowsHail)
+            put(StrengthSkill::class, Strength)
         }
 
     }

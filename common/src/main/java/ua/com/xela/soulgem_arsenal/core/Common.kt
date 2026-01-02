@@ -3,8 +3,16 @@ package ua.com.xela.soulgem_arsenal.core
 import net.minecraft.resources.ResourceLocation
 import ua.com.xela.soulgem_arsenal.registry.*
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowHailSkillBehavior
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowHailSkillCooldown
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.arrows_hail.ArrowsHailSkill
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkill
 import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillBehavior
+import ua.com.xela.soulgem_arsenal.skills.feature.bow.teleport.TeleportSkillCooldown
+import ua.com.xela.soulgem_arsenal.skills.feature.sword.strength.StrengthSkill
+import ua.com.xela.soulgem_arsenal.skills.feature.sword.strength.StrengthSkillBehavior
+import ua.com.xela.soulgem_arsenal.skills.feature.sword.strength.StrengthSkillCooldown
 import ua.com.xela.soulgem_arsenal.skills.system.SkillBehaviorRegistry
+import ua.com.xela.soulgem_arsenal.skills.system.SkillCooldownManager
 
 
 object Common {
@@ -14,14 +22,21 @@ object Common {
         ModItems.register()
         SkillComponents.register()
         ItemIdComponents.register()
-        registerSkillBehaviors()
         ParticleRegister.registry()
+        registerSkillBehaviors()
+        registerSkillCooldowns()
 
     }
 
     private fun registerSkillBehaviors() {
         SkillBehaviorRegistry.register(TeleportSkillBehavior)
         SkillBehaviorRegistry.register(ArrowHailSkillBehavior)
+        SkillBehaviorRegistry.register(StrengthSkillBehavior)
+    }
+    private fun registerSkillCooldowns() {
+        SkillCooldownManager.register(TeleportSkill.KEY to TeleportSkillCooldown)
+        SkillCooldownManager.register(ArrowsHailSkill.KEY to ArrowHailSkillCooldown)
+        SkillCooldownManager.register(StrengthSkill.KEY to StrengthSkillCooldown)
     }
 
     fun clientRegistry() {

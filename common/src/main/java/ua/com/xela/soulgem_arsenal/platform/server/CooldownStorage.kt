@@ -21,7 +21,7 @@ class CooldownStorage : SavedData() {
         val playerId: UUID,
         val chargeToRestore: Int,
         val endGameTime: Long,
-        val itemOnPlayer: Boolean = false,
+        val wasCanceled: Boolean = false,
         val appliedCharges: Int
     )
 
@@ -43,7 +43,7 @@ class CooldownStorage : SavedData() {
             entry.putInt(REMAINING_SECONDS, state.remainingSeconds)
             entry.putInt(CHARGE_TO_RESTORE, state.chargeToRestore)
             entry.putInt(CURRENT_CHARGE_INDEX, state.currentChargeIndex)
-            entry.putBoolean(ON_PLAYER, state.itemOnPlayer)
+            entry.putBoolean(WAS_CANCELED, state.wasCanceled)
             entry.putInt(APPLIED_CHARGES, state.appliedCharges)
 
 
@@ -68,7 +68,7 @@ class CooldownStorage : SavedData() {
         private const val CHARGE_TO_RESTORE = "ChargeToRestore"
         private const val CURRENT_CHARGE_INDEX = "ChargeIndexCurrent"
         private const val APPLIED_CHARGES = "APPLIED_CHARGES"
-        private const val ON_PLAYER = "ON_PLAYER"
+        private const val WAS_CANCELED = "WAS_CANCELED"
 
 
         private const val STORAGE_NAME = "soulegm_arsenal_cooldowns"
@@ -105,7 +105,7 @@ class CooldownStorage : SavedData() {
                 val remainingSeconds = element.getInt(REMAINING_SECONDS)
                 val chargeToRestore = element.getInt(CHARGE_TO_RESTORE)
                 val index = element.getInt(CURRENT_CHARGE_INDEX)
-                val itemOnPlayer = element.getBoolean(ON_PLAYER)
+                val itemOnPlayer = element.getBoolean(WAS_CANCELED)
                 val appliedCharges = element.getInt(APPLIED_CHARGES)
 
                 val key = CooldownKey(
@@ -120,7 +120,7 @@ class CooldownStorage : SavedData() {
                     chargeToRestore = chargeToRestore,
                     currentChargeIndex = index,
                     remainingSeconds = remainingSeconds,
-                    itemOnPlayer = itemOnPlayer,
+                    wasCanceled = itemOnPlayer,
                     appliedCharges = appliedCharges
                 )
 
